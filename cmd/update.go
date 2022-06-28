@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -34,9 +35,15 @@ var UpdateCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = saveProblem(data)
+		err = saveProblem(data.Result.Problems, "problems.json")
 		if err != nil {
 			log.Fatal(err)
+		}
+		for key, val := range divideProblems(data.Result.Problems) {
+			err = saveProblem(val, key+".json")
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 		no1.Done()
 	},
@@ -63,18 +70,27 @@ func findProblemList(tags []string) (problemList, error) {
 	return data, nil
 }
 
-func saveProblem(data problemList) error {
+func saveProblem(data []problemInfo, fileName string) error {
 	os.Mkdir("./codeforces", 0777)
-	file, err := os.OpenFile("./codeforces/problems.json", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0777)
+	file, err := os.OpenFile("./codeforces/"+fileName, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0777)
 	if err != nil {
 		return err
 	}
-	js, err := json.Marshal(data.Result.Problems)
+	js, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
 	fmt.Fprint(file, string(js))
 	return nil
+}
+
+func divideProblems(data []problemInfo) map[string][]problemInfo {
+	var res = make(map[string][]problemInfo)
+	for i := 0; i < len(data); i++ {
+		var rating = strconv.Itoa(data[i].Rating)
+		res[rating] = append(res[rating], data[i])
+	}
+	return res
 }
 
 type problemInfo struct {
