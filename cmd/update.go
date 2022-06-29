@@ -29,28 +29,33 @@ var UpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "update problem data",
 	Run: func(cmd *cobra.Command, args []string) {
-		cj := uispinner.New()
-		no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data updating").SetComplete("problem data update complete")
-		cj.Start()
-		defer cj.Stop()
-		data, err := findProblemList([]string{})
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = saveProblem(data.Result.Problems, "problems.json")
-		if err != nil {
-			log.Fatal(err)
-		}
-		for key, val := range divideProblems(data.Result.Problems) {
-			err = saveProblem(val, key+".json")
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-		good := mashup.QueryStatus(viper.GetString("handle"))
-		mashup.SaveStatus(good)
-		no1.Done()
+		updateFunc()
 	},
+}
+
+func updateFunc() {
+	cj := uispinner.New()
+	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data updating").SetComplete("problem data update complete")
+	cj.Start()
+	defer cj.Stop()
+	data, err := findProblemList([]string{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = saveProblem(data.Result.Problems, "problems.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for key, val := range divideProblems(data.Result.Problems) {
+		err = saveProblem(val, key+".json")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	good := mashup.QueryStatus(viper.GetString("handle"))
+	mashup.SaveStatus(good)
+	no1.Done()
+
 }
 
 func findProblemList(tags []string) (problemList, error) {
