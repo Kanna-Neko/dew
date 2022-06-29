@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/spf13/viper"
 
 	"github.com/PuerkitoBio/goquery"
 	resty "github.com/go-resty/resty/v2"
@@ -24,8 +25,9 @@ func init() {
 	me = resty.New()
 	me.SetHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
 	me.SetContentLength(true)
-	handle = "jaxleof"
-	password = "xinxin6635"
+	viper.SetConfigFile("./codeforces/config.yaml")
+	handle = viper.GetString("handle")
+	password = viper.GetString("password")
 }
 func GetCsrf() {
 	res, err := me.R().Get("https://codeforces.com/")
