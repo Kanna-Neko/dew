@@ -10,7 +10,6 @@ import (
 
 func init() {
 	rootCmd.AddCommand(config)
-	viper.SetConfigFile("./codeforces/config.yaml")
 }
 
 var config = &cobra.Command{

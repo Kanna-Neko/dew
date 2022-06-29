@@ -25,7 +25,6 @@ func init() {
 	me = resty.New()
 	me.SetHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
 	me.SetContentLength(true)
-	viper.SetConfigFile("./codeforces/config.yaml")
 	handle = viper.GetString("handle")
 	password = viper.GetString("password")
 }

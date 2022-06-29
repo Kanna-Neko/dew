@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"cf/mashup"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,6 +16,7 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 const problemApi = "https://codeforces.com/api/problemset.problems"
@@ -28,7 +30,7 @@ var UpdateCmd = &cobra.Command{
 	Short: "update problem data",
 	Run: func(cmd *cobra.Command, args []string) {
 		cj := uispinner.New()
-		no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data downloading").SetComplete("problem data download complete")
+		no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data updating").SetComplete("problem data update complete")
 		cj.Start()
 		defer cj.Stop()
 		data, err := findProblemList([]string{})
@@ -45,6 +47,8 @@ var UpdateCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 		}
+		good := mashup.QueryStatus(viper.GetString("handle"))
+		mashup.SaveStatus(good)
 		no1.Done()
 	},
 }
