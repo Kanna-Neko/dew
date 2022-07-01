@@ -3,3 +3,5 @@
 *.json
 
 cf
+
+.DS_Store
