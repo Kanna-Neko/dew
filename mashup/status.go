@@ -69,3 +69,16 @@ func SaveStatus(data map[string]bool) {
 		log.Fatal(err)
 	}
 }
+
+func GetStatus() map[string]bool {
+	var data, err = ioutil.ReadFile("./codeforces/myStatus.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var res map[string]bool
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return res
+}

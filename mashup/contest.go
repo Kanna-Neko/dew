@@ -3,7 +3,6 @@ package mashup
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -17,8 +16,7 @@ func CloneContest(title string, id string, duration string) {
 	cj.Start()
 	defer cj.Stop()
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("cloning").SetComplete("clone complete")
-	defer login.Done()
-	res, err := me.R().SetQueryParams(map[string]string{
+	_, err := me.R().SetFormData(map[string]string{
 		"action":                 "saveMashup",
 		"isCloneContest":         "true",
 		"parentContestIdAndName": id,
@@ -31,22 +29,22 @@ func CloneContest(title string, id string, duration string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(res.Body())
+	login.Done()
 }
 
 func QueryProbelmId(problem string) (string, error) {
 	var info ProblemInfos
-	_, err := me.R().SetQueryParams(map[string]string{
+	_, err := me.R().SetFormData(map[string]string{
 		"action":                      "problemQuery",
 		"problemQuery":                problem,
 		"previouslyAddedProblemCount": "0",
 		"csrf_token":                  csrf,
-	}).SetResult(&info).Post("https://codeforces.com/data/mashup")
+	}).SetResult(&info).Post("https://codeforces.ml/data/mashup")
 	if err != nil {
 		log.Fatal(err)
 	}
 	if len(info.Problems) == 0 {
-		return "", errors.New(problem + " isn't exist")
+		log.Fatal(errors.New(problem + " isn't exist"))
 	}
 	return info.Problems[0].Id, nil
 }
@@ -69,10 +67,8 @@ type ProblemInfos struct {
 
 func CreateContest(title string, duration string, problems []string) {
 	cj := uispinner.New()
-	cj.Start()
-	defer cj.Stop()
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("contest creating").SetComplete("contest create complete")
-	defer login.Done()
+	cj.Start()
 	var problemsJson = make([]ProblemJson, len(problems))
 	var group = new(sync.WaitGroup)
 	var lock = new(sync.RWMutex)
@@ -99,7 +95,7 @@ func CreateContest(title string, duration string, problems []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = me.R().SetQueryParams(map[string]string{
+	_, err = me.R().SetFormData(map[string]string{
 		"action":                 "saveMashup",
 		"isCloneContest":         "false",
 		"parentContestIdAndName": "",
@@ -108,10 +104,12 @@ func CreateContest(title string, duration string, problems []string) {
 		"contestDuration":        duration,
 		"problemsJson":           string(data),
 		"csrf_token":             csrf,
-	}).Post("https://codeforces.com/data/mashup")
+	}).Post("https://codeforces.ml/data/mashup")
 	if err != nil {
 		log.Fatal(err)
 	}
+	login.Done()
+	cj.Stop()
 }
 
 type ProblemJson struct {

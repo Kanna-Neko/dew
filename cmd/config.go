@@ -31,6 +31,7 @@ func configFunc() {
 	viper.Set("handle", handle)
 	viper.Set("password", password)
 	os.Mkdir("codeforces", 0777)
+	viper.SetConfigFile("./codeforces/config.yaml")
 	viper.WriteConfig()
 	fmt.Println("config save as ./codeforces/config.yaml")
 }

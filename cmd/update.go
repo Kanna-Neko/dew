@@ -52,6 +52,9 @@ func updateFunc() {
 			log.Fatal(err)
 		}
 	}
+	if viper.GetString("handle") == "" {
+		log.Fatal("config.yaml: handle is empty")
+	}
 	good := mashup.QueryStatus(viper.GetString("handle"))
 	mashup.SaveStatus(good)
 	no1.Done()
@@ -69,7 +72,6 @@ func findProblemList(tags []string) (problemList, error) {
 	body, _ := ioutil.ReadAll(res.Body)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.Println(string(body))
 		log.Fatalln(err)
 		return problemList{}, err
 	}
