@@ -2,6 +2,13 @@
 
 A contest generator base on codeforces, which will help you better practice. you can use cf generate a contest on mashup, whose problems is random or custom
 
+
+## Usage
+```shell
+cf init
+cf new div2
+```
+
 ## cf command
 ```shell
 Usage:
