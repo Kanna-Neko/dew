@@ -34,6 +34,11 @@ var UpdateCmd = &cobra.Command{
 }
 
 func updateFunc() {
+	viper.SetConfigFile("./codeforces/config.yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 	cj := uispinner.New()
 	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data updating").SetComplete("problem data update complete")
 	cj.Start()
