@@ -71,8 +71,8 @@ func PickSomeProblem(in [][]string) []string {
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("picking problems").SetComplete("pick problem complete")
 	var pro []string
 	var mp map[string]bool = make(map[string]bool)
-	for i := 0; i < len(div3Diffculty); i++ {
-		var one = PickOneProblem(div3Diffculty[i])
+	for i := 0; i < len(in); i++ {
+		var one = PickOneProblem(in[i])
 		var goal = strconv.Itoa(one.ContestId) + one.Index
 		if mp[goal] {
 			i--
