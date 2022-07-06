@@ -1,4 +1,5 @@
 # .github/workflows/release.yaml
+name: Go
 
 on:
   release:
