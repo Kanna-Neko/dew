@@ -1,25 +1,17 @@
-name: Go
+# .github/workflows/release.yaml
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  release:
+    types: [created]
 
 jobs:
-
-  build:
+  release-linux-amd64:
+    name: release linux/amd64
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
+    - uses: wangyoucao577/go-release-action@v1.29
       with:
-        go-version: 1.18
-
-    - name: Build
-      run: go build -v ./...
-
-    - name: Test
-      run: go test -v ./...
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: linux
+        goarch: amd64
