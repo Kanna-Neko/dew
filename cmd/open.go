@@ -18,7 +18,15 @@ var Open = &cobra.Command{
 	Use:   "open",
 	Short: "a shortcut of opening codeforces website",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
+		if runtime.GOOS == "darwin" {
+			var comm = exec.Command("open", "https://codeforces.com")
+			err := comm.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			log.Fatal(runtime.GOOS, "have not supported")
+		}
 	},
 }
 
