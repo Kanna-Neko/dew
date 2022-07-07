@@ -11,6 +11,7 @@ import (
 func init() {
 	Open.AddCommand(OpenGyms)
 	Open.AddCommand(OpenMashup)
+	Open.AddCommand(OpenStatus)
 	rootCmd.AddCommand(Open)
 }
 
@@ -48,10 +49,26 @@ var OpenGyms = &cobra.Command{
 
 var OpenMashup = &cobra.Command{
 	Use:   "mashup",
-	Short: "a shortcut of opening codeforces gyms",
+	Short: "a shortcut of opening codeforces mashup",
 	Run: func(cmd *cobra.Command, args []string) {
 		if runtime.GOOS == "darwin" {
 			var comm = exec.Command("open", "https://codeforces.com/mashups")
+			err := comm.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			log.Fatal(runtime.GOOS, "have not supported")
+		}
+	},
+}
+
+var OpenStatus = &cobra.Command{
+	Use:   "status",
+	Short: "a shortcut of opening codeforces status",
+	Run: func(cmd *cobra.Command, args []string) {
+		if runtime.GOOS == "darwin" {
+			var comm = exec.Command("open", "https://codeforces.com/problemset/status?my=on")
 			err := comm.Run()
 			if err != nil {
 				log.Fatal(err)
