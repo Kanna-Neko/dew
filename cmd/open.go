@@ -57,15 +57,22 @@ var OpenRandom = &cobra.Command{
 	},
 }
 
+var commands = map[string]string{
+	"windows": "start",
+	"darwin":  "open",
+	"linux":   "xdg-open",
+}
+
 func OpenWebsite(path string) {
-	if runtime.GOOS == "darwin" {
-		var comm = exec.Command("open", path)
-		err := comm.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		log.Fatal(runtime.GOOS, "have not supported")
+	run, ok := commands[runtime.GOOS]
+	if !ok {
+		log.Fatalf("don't know how to open things on %s platform", runtime.GOOS)
+	}
+
+	cmd := exec.Command(run, path)
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -78,14 +85,5 @@ func OpenRandomFunc() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if runtime.GOOS == "darwin" {
-		var comm = exec.Command("open", "https://codeforces.com/problemset/problem/"+randomString[:len(randomString)-1]+"/"+randomString[len(randomString)-1:])
-		err := comm.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		log.Fatal(runtime.GOOS, "have not supported")
-	}
-
+	OpenWebsite("https://codeforces.com/problemset/problem/" + randomString[:len(randomString)-1] + "/" + randomString[len(randomString)-1:])
 }
