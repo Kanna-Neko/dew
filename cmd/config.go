@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(config)
+	InitCmd.AddCommand(config)
 }
 
 var config = &cobra.Command{

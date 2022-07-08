@@ -12,6 +12,7 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var div3Diffculty = [][]string{{"800"}, {"800", "900"}, {"900", "1000", "1100"}, {"1100", "1200", "1300", "1400"}, {"1400", "1500", "1600", "1700"}, {"1700", "1800", "1900"}, {"1900", "2000", "2100"}}
@@ -23,6 +24,7 @@ func init() {
 	NewCmd.AddCommand(div1)
 	NewCmd.AddCommand(div2)
 	NewCmd.AddCommand(div3)
+	NewCmd.AddCommand(randomOne)
 }
 
 const (
@@ -62,6 +64,35 @@ var div1 = &cobra.Command{
 		pro := PickSomeProblem(div1Diffculty)
 		mashup.Login()
 		mashup.CreateContest(title, duration, pro)
+	},
+}
+
+var randomOne = &cobra.Command{
+	Use:   "random",
+	Short: "random select one problem",
+	Run: func(cmd *cobra.Command, args []string) {
+		var rating = viper.GetInt("rating")
+		if rating < 800 {
+			rating = 800
+		}
+		rating = (rating / 100) * 100
+		lowRating := rating - 100
+		if lowRating < 800 {
+			lowRating = 800
+		}
+		highRating := rating + 200
+		if highRating > 3500 {
+			highRating = 3500
+		}
+		var pro []string
+		for i := lowRating; i <= highRating; i += 1000 {
+			pro = append(pro, strconv.Itoa(i))
+		}
+		var thisOne = PickOneProblem(pro)
+		err := ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
+		if err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
