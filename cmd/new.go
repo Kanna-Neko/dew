@@ -82,11 +82,11 @@ var randomOne = &cobra.Command{
 			rating = 800
 		}
 		rating = (rating / 100) * 100
-		lowRating := rating - 100
-		if lowRating < 800 {
-			lowRating = 800
+		lowRating := rating + 200
+		if lowRating > 3500 {
+			lowRating = 3500
 		}
-		highRating := rating + 200
+		highRating := rating + 500
 		if highRating > 3500 {
 			highRating = 3500
 		}
