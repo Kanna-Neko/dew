@@ -43,28 +43,29 @@ var div3 = &cobra.Command{
 	Use:   "div3",
 	Short: "create a contest, whose difficulty like div3",
 	Run: func(cmd *cobra.Command, args []string) {
-		pro := PickSomeProblem(div3Diffculty)
-		mashup.Login()
-		mashup.CreateContest(title, duration, pro)
+		newContest(div3Diffculty)
 	},
 }
 var div2 = &cobra.Command{
 	Use:   "div2",
 	Short: "create a contest, whose difficulty like div2",
 	Run: func(cmd *cobra.Command, args []string) {
-		pro := PickSomeProblem(div2Diffculty)
-		mashup.Login()
-		mashup.CreateContest(title, duration, pro)
+		newContest(div2Diffculty)
 	},
 }
 var div1 = &cobra.Command{
 	Use:   "div1",
 	Short: "create a contest, whose difficulty like div1",
 	Run: func(cmd *cobra.Command, args []string) {
-		pro := PickSomeProblem(div1Diffculty)
-		mashup.Login()
-		mashup.CreateContest(title, duration, pro)
+		newContest(div1Diffculty)
 	},
+}
+
+func newContest(diffculty [][]string) {
+	pro := PickSomeProblem(diffculty)
+	mashup.Login()
+	mashup.CreateContest(title, duration, pro)
+	OpenWebsite("https://codeforces.com/mashups")
 }
 
 var randomOne = &cobra.Command{
