@@ -71,6 +71,11 @@ var randomOne = &cobra.Command{
 	Use:   "random",
 	Short: "random select one problem",
 	Run: func(cmd *cobra.Command, args []string) {
+		viper.SetConfigFile("./codeforces/config.yaml")
+		err := viper.ReadInConfig()
+		if err != nil {
+			log.Fatal(err)
+		}
 		var rating = viper.GetInt("rating")
 		if rating < 800 {
 			rating = 800
@@ -89,10 +94,11 @@ var randomOne = &cobra.Command{
 			pro = append(pro, strconv.Itoa(i))
 		}
 		var thisOne = PickOneProblem(pro)
-		err := ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
+		err = ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
 		if err != nil {
 			log.Fatal(err)
 		}
+		OpenRandomFunc()
 	},
 }
 
