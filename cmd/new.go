@@ -3,7 +3,6 @@ package cmd
 import (
 	"cf/mashup"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
