@@ -95,7 +95,6 @@ var randomOne = &cobra.Command{
 		for i := lowRating; i <= highRating; i += 100 {
 			pro = append(pro, strconv.Itoa(i))
 		}
-		fmt.Println(pro)
 		var thisOne = PickOneProblem(pro)
 		err = ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
 		if err != nil {
