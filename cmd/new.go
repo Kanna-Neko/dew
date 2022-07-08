@@ -3,6 +3,7 @@ package cmd
 import (
 	"cf/mashup"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -91,9 +92,10 @@ var randomOne = &cobra.Command{
 			highRating = 3500
 		}
 		var pro []string
-		for i := lowRating; i <= highRating; i += 1000 {
+		for i := lowRating; i <= highRating; i += 100 {
 			pro = append(pro, strconv.Itoa(i))
 		}
+		fmt.Println(pro)
 		var thisOne = PickOneProblem(pro)
 		err = ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
 		if err != nil {
