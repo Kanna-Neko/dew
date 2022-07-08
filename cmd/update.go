@@ -63,7 +63,9 @@ func updateFunc() {
 	good := mashup.QueryStatus(viper.GetString("handle"))
 	mashup.SaveStatus(good)
 	no1.Done()
-
+	no2 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating updating").SetComplete("user rating update complete")
+	SaveRating(viper.GetString("handle"))
+	no2.Done()
 }
 
 func findProblemList(tags []string) (problemList, error) {
@@ -130,4 +132,35 @@ type Result struct {
 type problemList struct {
 	Status string `json:"status"`
 	Result Result `json:"result"`
+}
+
+func getRating(handle string) int {
+	res, err := http.Get("https://codeforces.com/api/user.info?handles=" + handle)
+	if err != nil {
+		log.Fatal(err)
+	}
+	data, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var info UserInfo
+	err = json.Unmarshal(data, &info)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return info.Result[0].Rating
+}
+
+type UserInfo struct {
+	Status string           `json:"status"`
+	Result []UserInfoResult `json:"result"`
+}
+type UserInfoResult struct {
+	Rating int `json:"rating"`
+}
+
+func SaveRating(handle string) {
+	viper.Set("rating", getRating(handle))
+	viper.SetConfigFile("./codeforces/config.yaml")
+	viper.WriteConfig()
 }
