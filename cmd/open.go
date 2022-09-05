@@ -68,8 +68,12 @@ func OpenWebsite(path string) {
 	if !ok {
 		log.Fatalf("don't know how to open things on %s platform", runtime.GOOS)
 	}
-
-	cmd := exec.Command(run, path)
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd.exe", "/C", "start", path)
+	} else {
+		cmd = exec.Command(run, path)
+	}
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err)
