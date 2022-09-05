@@ -54,12 +54,18 @@ var OpenRandom = &cobra.Command{
 	Use:   "random",
 	Short: "a shortcut of opening codeforces status",
 	Run: func(cmd *cobra.Command, args []string) {
+		if !checkConfigFile() {
+			log.Fatal("config file is not exist, please use cf init command")
+		}
 		viper.SetConfigFile("./codeforces/config.yaml")
 		err := viper.ReadInConfig()
 		if err != nil {
 			log.Fatal(err)
 		}
 		var name = viper.GetString("random")
+		if name == "" {
+			log.Fatal("please use cf random command first")
+		}
 		OpenWebsite("https://codeforces.com/problemset/problem/" + name[:len(name)-1] + "/" + name[len(name)-1:])
 	},
 }
