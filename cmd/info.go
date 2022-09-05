@@ -31,6 +31,6 @@ var info = &cobra.Command{
 
 func checkConfigFile() bool {
 	_, err := os.Stat("./codeforces/config.yaml")
-	isExist := os.IsExist(err)
-	return !isExist
+	isExist := !os.IsNotExist(err)
+	return isExist
 }

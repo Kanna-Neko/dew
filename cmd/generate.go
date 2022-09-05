@@ -77,6 +77,10 @@ var randomOne = &cobra.Command{
 }
 
 func Random() {
+	isExist := checkConfigFile()
+	if !isExist {
+		log.Fatal("config file is not exist, please use cf init command")
+	}
 	viper.SetConfigFile("./codeforces/config.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {

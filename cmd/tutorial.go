@@ -21,7 +21,7 @@ var tutorial = &cobra.Command{
 			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + args[0])
 		} else {
 			_, err := os.Stat("./codeforces/config.yaml")
-			isExist := os.IsExist(err)
+			isExist := os.IsNotExist(err)
 			if isExist {
 				log.Fatal("config file is not exist, please use cf init command")
 			}
