@@ -33,7 +33,7 @@ const (
 )
 
 var NewCmd = &cobra.Command{
-	Use:   "new",
+	Use:   "generate",
 	Short: "create a contest",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
@@ -72,35 +72,40 @@ var randomOne = &cobra.Command{
 	Use:   "random",
 	Short: "random select one problem",
 	Run: func(cmd *cobra.Command, args []string) {
-		viper.SetConfigFile("./codeforces/config.yaml")
-		err := viper.ReadInConfig()
-		if err != nil {
-			log.Fatal(err)
-		}
-		var rating = viper.GetInt("rating")
-		if rating < 800 {
-			rating = 800
-		}
-		rating = (rating / 100) * 100
-		lowRating := rating + 200
-		if lowRating > 3500 {
-			lowRating = 3500
-		}
-		highRating := rating + 500
-		if highRating > 3500 {
-			highRating = 3500
-		}
-		var pro []string
-		for i := lowRating; i <= highRating; i += 100 {
-			pro = append(pro, strconv.Itoa(i))
-		}
-		var thisOne = PickOneProblem(pro)
-		err = ioutil.WriteFile("./codeforces/random.helloWorld", []byte(strconv.Itoa(thisOne.ContestId)+thisOne.Index), 0666)
-		if err != nil {
-			log.Fatal(err)
-		}
-		OpenRandomFunc()
+		Random()
 	},
+}
+
+func Random() {
+	viper.SetConfigFile("./codeforces/config.yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	var rating = viper.GetInt("rating")
+	if rating < 800 {
+		rating = 800
+	}
+	rating = (rating / 100) * 100
+	lowRating := rating + 200
+	if lowRating > 3500 {
+		lowRating = 3500
+	}
+	highRating := rating + 500
+	if highRating > 3500 {
+		highRating = 3500
+	}
+	var pro []string
+	for i := lowRating; i <= highRating; i += 100 {
+		pro = append(pro, strconv.Itoa(i))
+	}
+	var thisOne = PickOneProblem(pro)
+	viper.Set("random", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
+	err = viper.WriteConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	OpenRandomFunc(thisOne)
 }
 
 func PickSomeProblem(in [][]string) []string {

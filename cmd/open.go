@@ -1,12 +1,13 @@
 package cmd
 
 import (
-	"io/ioutil"
 	"log"
 	"os/exec"
 	"runtime"
+	"strconv"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -53,7 +54,13 @@ var OpenRandom = &cobra.Command{
 	Use:   "random",
 	Short: "a shortcut of opening codeforces status",
 	Run: func(cmd *cobra.Command, args []string) {
-		OpenRandomFunc()
+		viper.SetConfigFile("./codeforces/config.yaml")
+		err := viper.ReadInConfig()
+		if err != nil {
+			log.Fatal(err)
+		}
+		var name = viper.GetString("random")
+		OpenWebsite("https://codeforces.com/problemset/problem/" + name[:len(name)-1] + "/" + name[len(name)-1:])
 	},
 }
 
@@ -80,14 +87,6 @@ func OpenWebsite(path string) {
 	}
 }
 
-func OpenRandomFunc() {
-	var random, err = ioutil.ReadFile("./codeforces/random.helloWorld")
-	randomString := string(random)
-	if randomString == "" {
-		log.Fatal("random.helloWorld is empty")
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	OpenWebsite("https://codeforces.com/problemset/problem/" + randomString[:len(randomString)-1] + "/" + randomString[len(randomString)-1:])
+func OpenRandomFunc(info problemInfo) {
+	OpenWebsite("https://codeforces.com/problemset/problem/" + strconv.Itoa(info.ContestId) + "/" + info.Index)
 }

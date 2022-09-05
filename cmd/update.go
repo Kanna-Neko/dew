@@ -160,7 +160,11 @@ type UserInfoResult struct {
 }
 
 func SaveRating(handle string) {
-	viper.Set("rating", getRating(handle))
 	viper.SetConfigFile("./codeforces/config.yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	viper.Set("rating", getRating(handle))
 	viper.WriteConfig()
 }
