@@ -1,12 +1,14 @@
 # cf-helper
 
-A contest generator base on codeforces, which will help you better practice. you can use cf generate a contest on mashup, whose problems is random or custom
+A contest generator base on codeforces, which will help you better practice. you can use cf generate a contest on mashup, whose problems is random
 
+I suggest you use 'cf random' command, which will generate one problem whose difficulty base your rating [+200, +500] 
 
 ## Usage
 ```shell
 cf init
-cf new div2
+cf random
+cf generate div2
 ```
 
 ## cf command
@@ -17,10 +19,14 @@ Usage:
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
-  config      config codeforces handle and password
+  generate    create a contest
   help        Help about any command
+  info        print config info
   init        init somethings
-  new         create a contest
+  open        a shortcut of opening codeforces website
+  problem     open problem in codeforces
+  random      alias to cf generate random
+  tutorial    as the name says
   update      update problem data
 
 Flags:
@@ -32,20 +38,15 @@ Use "cf [command] --help" for more information about a command.
 ## cf new command
 ```shell
 create a contest
-
 Usage:
-  cf new [flags]
-  cf new [command]
+  cf generate [flags]
+  cf generate [command]
 
 Available Commands:
   div1        create a contest, whose difficulty like div1
   div2        create a contest, whose difficulty like div2
   div3        create a contest, whose difficulty like div3
-
-Flags:
-  -h, --help   help for new
-
-Use "cf new [command] --help" for more information about a command.
+  random      random select one problem
 ```
 
 ## Technology Stack
