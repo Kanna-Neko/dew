@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"cf/mashup"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jaxleof/cf-helper/mashup"
 
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"

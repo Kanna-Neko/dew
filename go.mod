@@ -1,4 +1,4 @@
-module cf-helper
+module github.com/jaxleof/cf-helper
 
 go 1.18
 

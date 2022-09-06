@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"cf/mashup"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/jaxleof/cf-helper/mashup"
 
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"

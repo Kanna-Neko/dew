@@ -1,8 +1,9 @@
 package main
 
 import (
-	"cf/cmd"
 	"log"
+
+	"github.com/jaxleof/cf-helper/cmd"
 )
 
 func main() {
