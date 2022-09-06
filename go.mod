@@ -1,4 +1,4 @@
-module cf
+module cf-helper
 
 go 1.18
 
