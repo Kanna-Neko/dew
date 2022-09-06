@@ -31,7 +31,6 @@ var tutorial = &cobra.Command{
 				log.Fatal(err)
 			}
 			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + viper.GetString("random"))
-
 		}
 	},
 }

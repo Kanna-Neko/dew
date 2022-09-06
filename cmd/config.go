@@ -2,8 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"time"
 
+	"github.com/briandowns/spinner"
+	"github.com/jaxleof/uispinner"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -21,6 +25,14 @@ var config = &cobra.Command{
 }
 
 func configFunc() {
+	if !checkConfigFile() {
+		os.Mkdir("codeforces", 0777)
+	}
+	viper.SetConfigFile("./codeforces/config.yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println("please input your codeforces handle(account)")
 	var handle string
 	fmt.Scanln(&handle)
@@ -30,8 +42,12 @@ func configFunc() {
 	fmt.Printf("your handle is %s\nyour password is %s\n", handle, password)
 	viper.Set("handle", handle)
 	viper.Set("password", password)
-	os.Mkdir("codeforces", 0777)
-	viper.SetConfigFile("./codeforces/config.yaml")
 	viper.WriteConfig()
-	fmt.Println("config save as ./codeforces/config.yaml")
+	fmt.Println("handle and password save into ./codeforces/config.yaml")
+	cj := uispinner.New()
+	defer cj.Stop()
+	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating is initing").SetComplete("user rating init complete")
+	defer no1.Done()
+	cj.Start()
+	SaveRating(handle)
 }

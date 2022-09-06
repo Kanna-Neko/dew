@@ -148,6 +148,9 @@ func getRating(handle string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if info.Status == "FAILED" {
+		log.Fatal(string(data))
+	}
 	return info.Result[0].Rating
 }
 

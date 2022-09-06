@@ -49,6 +49,12 @@ func Login() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if !viper.IsSet("handle") {
+		log.Fatal("handle info is empty\n you can use cf init config first")
+	}
+	if !viper.IsSet("password") {
+		log.Fatal("password info is empty\n you can use cf config first")
+	}
 	handle = viper.GetString("handle")
 	password = viper.GetString("password")
 	cj := uispinner.New()
