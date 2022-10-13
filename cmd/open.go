@@ -30,8 +30,14 @@ var OpenGyms = &cobra.Command{
 	Use:   "gym",
 	Short: "a shortcut of opening codeforces gyms",
 	Run: func(cmd *cobra.Command, args []string) {
-		OpenWebsite("https://codeforces.com/gyms")
+		if len(args) == 0 {
+			OpenWebsite("https://codeforces.com/gyms")
+		} else {
+			OpenWebsite("https://codeforces.com/gym/" + args[0])
+		}
+
 	},
+	Args: cobra.MaximumNArgs(1),
 }
 
 var OpenMashup = &cobra.Command{
