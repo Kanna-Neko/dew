@@ -49,6 +49,7 @@ func Login() {
 		"action":        "enter",
 		"handleOrEmail": handle,
 		"password":      password,
+		"remember":      "on",
 	}).Post("https://codeforces.com/enter?back=%2F")
 	if err != nil {
 		log.Fatal("login failed")

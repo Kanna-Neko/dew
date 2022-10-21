@@ -63,11 +63,7 @@ var OpenRandom = &cobra.Command{
 		if !checkConfigFile() {
 			log.Fatal("config file is not exist, please use cf init command")
 		}
-		viper.SetConfigFile("./codeforces/config.yaml")
-		err := viper.ReadInConfig()
-		if err != nil {
-			log.Fatal(err)
-		}
+		ReadConfig()
 		var name = viper.GetString("random")
 		if name == "" {
 			log.Fatal("please use cf random command first")

@@ -25,11 +25,7 @@ var tutorial = &cobra.Command{
 			if isExist {
 				log.Fatal("config file is not exist, please use cf init command")
 			}
-			viper.SetConfigFile("./codeforces/config.yaml")
-			err = viper.ReadInConfig()
-			if err != nil {
-				log.Fatal(err)
-			}
+			ReadConfig()
 			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + viper.GetString("random"))
 		}
 	},

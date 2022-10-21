@@ -63,10 +63,10 @@ var div1 = &cobra.Command{
 }
 
 func newContest(diffculty [][]string) {
-	pro := PickSomeProblem(diffculty)
 	link.Login()
+	pro := PickSomeProblem(diffculty)
 	link.CreateContest(title, duration, pro)
-	OpenWebsite("https://codeforces.com/links")
+	OpenWebsite("https://codeforces.com/mashups")
 }
 
 var randomOne = &cobra.Command{
@@ -82,11 +82,7 @@ func Random() {
 	if !isExist {
 		log.Fatal("config file is not exist, please use cf init command")
 	}
-	viper.SetConfigFile("./codeforces/config.yaml")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
+	ReadConfig()
 	if !viper.IsSet("rating") {
 		log.Fatal("we notice the info of rating is not exist, please use cf init config command first, or modify rating in ./codeforces/config.yaml (you can add a line and write 'rating: 1234').")
 	}
@@ -109,7 +105,7 @@ func Random() {
 	}
 	var thisOne = PickOneProblem(pro)
 	viper.Set("random", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
-	err = viper.WriteConfig()
+	err := viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)
 	}

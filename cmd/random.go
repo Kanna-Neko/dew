@@ -45,17 +45,14 @@ func randomMinMax(min, max int) {
 	}
 	max -= max%100;
 	viper.SetConfigFile("./codeforces/config.yaml")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
+	ReadConfig()
 	var pro []string
 	for i := min; i <= max; i+=100 {
 		pro = append(pro, strconv.Itoa(i))
 	}
 	var thisOne = PickOneProblem(pro)
 	viper.Set("random", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
-	err = viper.WriteConfig()
+	err := viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
