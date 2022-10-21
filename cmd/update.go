@@ -61,8 +61,7 @@ func updateFunc() {
 	if viper.GetString("handle") == "" {
 		log.Fatal("config.yaml: handle is empty")
 	}
-	good := mashup.QueryStatus(viper.GetString("handle"))
-	mashup.SaveStatus(good)
+	mashup.SaveStatus(viper.GetString("handle"))
 	no1.Done()
 	no2 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating updating").SetComplete("user rating update complete")
 	SaveRating(viper.GetString("handle"))

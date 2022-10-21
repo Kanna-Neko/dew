@@ -59,7 +59,7 @@ func QueryStatus(handle string) map[string]bool {
 	}
 	return cj
 }
-func SaveStatus(data map[string]bool) {
+func saveStatus(data map[string]bool) {
 	var res, err = json.Marshal(data)
 	if err != nil {
 		log.Fatal(err)
@@ -68,6 +68,10 @@ func SaveStatus(data map[string]bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+func SaveStatus(handle string) {
+	good := QueryStatus(handle)
+	saveStatus(good)
 }
 
 func GetStatus() map[string]bool {

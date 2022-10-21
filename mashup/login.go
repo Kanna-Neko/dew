@@ -2,7 +2,6 @@ package mashup
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"time"
 
@@ -25,22 +24,6 @@ func init() {
 	me = resty.New()
 	// me.SetHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
 	me.SetContentLength(true)
-}
-func GetCsrf() {
-	res, err := me.R().Get("https://codeforces.ml/")
-	if err != nil {
-		log.Fatal(err)
-	}
-	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(res.Body()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	var exist bool
-	csrf, exist = doc.Find(".csrf-token").First().Attr("data-csrf")
-	if !exist {
-		fmt.Println("obtain csrf failed")
-		return
-	}
 }
 
 func Login() {
@@ -66,7 +49,7 @@ func Login() {
 		"action":        "enter",
 		"handleOrEmail": handle,
 		"password":      password,
-	}).Post("https://codeforces.ml/enter?back=%2F")
+	}).Post("https://codeforces.com/enter?back=%2F")
 	if err != nil {
 		log.Fatal("login failed")
 	}
