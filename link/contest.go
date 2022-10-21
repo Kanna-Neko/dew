@@ -1,4 +1,4 @@
-package mashup
+package link
 
 import (
 	"encoding/json"

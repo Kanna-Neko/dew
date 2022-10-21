@@ -12,9 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jaxleof/cf-helper/mashup"
-
 	"github.com/briandowns/spinner"
+	"github.com/jaxleof/cf-helper/link"
 	"github.com/jaxleof/uispinner"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -61,7 +60,7 @@ func updateFunc() {
 	if viper.GetString("handle") == "" {
 		log.Fatal("config.yaml: handle is empty")
 	}
-	mashup.SaveStatus(viper.GetString("handle"))
+	link.SaveStatus(viper.GetString("handle"))
 	no1.Done()
 	no2 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating updating").SetComplete("user rating update complete")
 	SaveRating(viper.GetString("handle"))

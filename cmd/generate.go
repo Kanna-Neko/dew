@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jaxleof/cf-helper/mashup"
+	"github.com/jaxleof/cf-helper/link"
 
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"
@@ -64,9 +64,9 @@ var div1 = &cobra.Command{
 
 func newContest(diffculty [][]string) {
 	pro := PickSomeProblem(diffculty)
-	mashup.Login()
-	mashup.CreateContest(title, duration, pro)
-	OpenWebsite("https://codeforces.com/mashups")
+	link.Login()
+	link.CreateContest(title, duration, pro)
+	OpenWebsite("https://codeforces.com/links")
 }
 
 var randomOne = &cobra.Command{
@@ -139,7 +139,7 @@ func PickSomeProblem(in [][]string) []string {
 
 func PickOneProblem(r []string) problemInfo {
 	data := PickProblems(r)
-	data = Deduplication(data, mashup.GetStatus())
+	data = Deduplication(data, link.GetStatus())
 	if len(data) == 0 {
 		log.Fatal("you are so good, you have solve all problems of the range", r)
 	}
