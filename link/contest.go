@@ -25,7 +25,7 @@ func CloneContest(title string, id string, duration string) {
 		"contestDuration":        duration,
 		"problemsJson":           "[]",
 		"csrf_token":             csrf,
-	}).Post("https://codeforces.com/data/mashup")
+	}).Post(codeforcesDomain + "/data/mashup")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func QueryProbelmId(problem string) (string, error) {
 		"problemQuery":                problem,
 		"previouslyAddedProblemCount": "0",
 		"csrf_token":                  csrf,
-	}).SetResult(&info).Post("https://codeforces.com/data/mashup")
+	}).SetResult(&info).Post(codeforcesDomain + "/data/mashup")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,7 +104,7 @@ func CreateContest(title string, duration string, problems []string) {
 		"contestDuration":        duration,
 		"problemsJson":           string(data),
 		"csrf_token":             csrf,
-	}).Post("https://codeforces.com/data/mashup")
+	}).Post(codeforcesDomain + "/data/mashup")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -22,7 +22,7 @@ var Open = &cobra.Command{
 	Use:   "open",
 	Short: "a shortcut of opening codeforces website",
 	Run: func(cmd *cobra.Command, args []string) {
-		OpenWebsite("https://codeforces.com")
+		OpenWebsite(codeforcesDomain)
 	},
 }
 
@@ -31,9 +31,9 @@ var OpenGyms = &cobra.Command{
 	Short: "a shortcut of opening codeforces gyms",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			OpenWebsite("https://codeforces.com/gyms")
+			OpenWebsite(codeforcesDomain + "/gyms")
 		} else {
-			OpenWebsite("https://codeforces.com/gym/" + args[0])
+			OpenWebsite(codeforcesDomain + "/gym/" + args[0])
 		}
 
 	},
@@ -44,7 +44,7 @@ var OpenMashup = &cobra.Command{
 	Use:   "mashup",
 	Short: "a shortcut of opening codeforces mashup",
 	Run: func(cmd *cobra.Command, args []string) {
-		OpenWebsite("https://codeforces.com/mashups")
+		OpenWebsite(codeforcesDomain + "/mashups")
 	},
 }
 
@@ -52,7 +52,7 @@ var OpenStatus = &cobra.Command{
 	Use:   "status",
 	Short: "a shortcut of opening codeforces status",
 	Run: func(cmd *cobra.Command, args []string) {
-		OpenWebsite("https://codeforces.com/problemset/status?my=on")
+		OpenWebsite(codeforcesDomain + "/problemset/status?my=on")
 	},
 }
 
@@ -68,7 +68,7 @@ var OpenRandom = &cobra.Command{
 		if name == "" {
 			log.Fatal("please use cf random command first")
 		}
-		OpenWebsite("https://codeforces.com/problemset/problem/" + name[:len(name)-1] + "/" + name[len(name)-1:])
+		OpenWebsite(codeforcesDomain + "/problemset/problem/" + name[:len(name)-1] + "/" + name[len(name)-1:])
 	},
 }
 
@@ -96,5 +96,5 @@ func OpenWebsite(path string) {
 }
 
 func OpenRandomFunc(info problemInfo) {
-	OpenWebsite("https://codeforces.com/problemset/problem/" + strconv.Itoa(info.ContestId) + "/" + info.Index)
+	OpenWebsite(codeforcesDomain + "/problemset/problem/" + strconv.Itoa(info.ContestId) + "/" + info.Index)
 }

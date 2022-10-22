@@ -21,7 +21,7 @@ var info = &cobra.Command{
 			log.Fatal("config file is not exist, please use cf init command")
 		}
 		ReadConfig()
-		fmt.Printf("handle: %v\npassword: %v\nrating:%v\nrandom problem: %v\n", viper.Get("handle"), viper.Get("password"), viper.Get("rating"), viper.Get("random"))
+		fmt.Printf("handle: %v\npassword: %v\nrating:%v\nproblem: %v\n", viper.Get("handle"), viper.Get("password"), viper.Get("rating"), viper.Get("problem"))
 	},
 }
 

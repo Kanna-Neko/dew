@@ -16,6 +16,8 @@ import (
 	resty "github.com/go-resty/resty/v2"
 )
 
+const codeforcesDomain = "https://www.codeforces.com"
+
 var (
 	me        *resty.Client
 	csrf      string
@@ -54,11 +56,11 @@ func Login() {
 }
 
 func checkLoginAgain() bool {
-	t := viper.GetInt64("expire")
+	t := viper.GetInt64("cookie.expire")
 	if time.Now().Unix() > t {
 		return true
 	}
-	if !viper.IsSet("csrf") || !viper.IsSet("JSESSIONID") || !viper.IsSet("39ce7") {
+	if !viper.IsSet("cookie.csrf") || !viper.IsSet("cookie.JSESSIONID") || !viper.IsSet("cookie.39ce7") {
 		return true
 	}
 	return false
@@ -83,19 +85,19 @@ func loginAgain() {
 		"handleOrEmail": handle,
 		"password":      password,
 		"remember":      "on",
-	}).Post("https://codeforces.com/enter?back=%2F")
+	}).Post(codeforcesDomain + "/enter?back=%2F")
 	if err != nil {
 		log.Fatal(err)
 	}
-	urL, _ := url.Parse("https://codeforces.com")
+	urL, _ := url.Parse(codeforcesDomain)
 	for _, val := range cookieJar.Cookies(urL) {
 		if val.Name == "39ce7" {
-			viper.Set(val.Name, val.Value)
+			viper.Set("cookie.39ce7", val.Value)
 		} else if val.Name == "JSESSIONID" {
-			viper.Set(val.Name, val.Value)
+			viper.Set("cookie.JSESSIONID", val.Value)
 		}
 	}
-	viper.Set("expire", time.Now().AddDate(0, 0, 29).Unix())
+	viper.Set("cookie.expire", time.Now().AddDate(0, 0, 29).Unix())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,7 +111,7 @@ func loginAgain() {
 		log.Fatal("obtain csrf failed")
 		return
 	}
-	viper.Set("csrf", csrf)
+	viper.Set("cookie.csrf", csrf)
 	err = viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -119,11 +121,11 @@ func loginAgain() {
 func reloadCookie() {
 	me.SetCookie(&http.Cookie{
 		Name:  "39ce7",
-		Value: viper.GetString("39ce7"),
+		Value: viper.GetString("cookie.39ce7"),
 	})
 	me.SetCookie(&http.Cookie{
 		Name:  "JSESSIONID",
-		Value: viper.GetString("JSESSIONID"),
+		Value: viper.GetString("cookie.JSESSIONID"),
 	})
-	csrf = viper.GetString("csrf")
+	csrf = viper.GetString("cookie.csrf")
 }

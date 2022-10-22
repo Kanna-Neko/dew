@@ -130,7 +130,7 @@ type problemList struct {
 }
 
 func getRating(handle string) int {
-	res, err := http.Get("https://codeforces.com/api/user.info?handles=" + handle)
+	res, err := http.Get(codeforcesDomain + "/api/user.info?handles=" + handle)
 	if err != nil {
 		log.Fatal(err)
 	}

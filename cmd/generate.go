@@ -66,7 +66,7 @@ func newContest(diffculty [][]string) {
 	link.Login()
 	pro := PickSomeProblem(diffculty)
 	link.CreateContest(title, duration, pro)
-	OpenWebsite("https://codeforces.com/mashups")
+	OpenWebsite(codeforcesDomain+"/mashups")
 }
 
 var randomOne = &cobra.Command{

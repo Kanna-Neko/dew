@@ -24,7 +24,7 @@ func SubmitCode(contest string, index string, code []byte) {
 		"programTypeId":         "61",
 		"source":                string(code),
 		"tabSize":               "4",
-	}).Post(fmt.Sprintf("https://codeforces.com/contest/%s/submit?csrf_token=%s", contest, csrf))
+	}).Post(fmt.Sprintf(codeforcesDomain+"/contest/%s/submit?csrf_token=%s", contest, csrf))
 	if err != nil {
 		log.Fatal(err)
 	}

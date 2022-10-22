@@ -37,7 +37,7 @@ type Problem struct {
 }
 
 func QueryStatus(handle string) map[string]bool {
-	res, err := http.Get("https://codeforces.com/api/user.status?handle=" + handle)
+	res, err := http.Get(codeforcesDomain + "/api/user.status?handle=" + handle)
 	if err != nil {
 		log.Fatal(err)
 	}

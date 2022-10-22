@@ -8,6 +8,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+const (
+	luoguDomain = "https://www.luogu.com.cn"
+)
+
 func init() {
 	rootCmd.AddCommand(tutorial)
 }
@@ -18,7 +22,7 @@ var tutorial = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
-			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + args[0])
+			OpenWebsite(luoguDomain + "/problem/solution/CF" + args[0])
 		} else {
 			_, err := os.Stat("./codeforces/config.yaml")
 			isExist := os.IsNotExist(err)
@@ -26,7 +30,10 @@ var tutorial = &cobra.Command{
 				log.Fatal("config file is not exist, please use cf init command")
 			}
 			ReadConfig()
-			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + viper.GetString("problem"))
+			if viper.GetString("problem") == "" {
+				log.Fatal("please specify a problem first")
+			}
+			OpenWebsite(luoguDomain + "/problem/solution/CF" + viper.GetString("problem"))
 		}
 	},
 }
