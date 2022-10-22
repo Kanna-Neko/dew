@@ -26,7 +26,7 @@ var tutorial = &cobra.Command{
 				log.Fatal("config file is not exist, please use cf init command")
 			}
 			ReadConfig()
-			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + viper.GetString("random"))
+			OpenWebsite("https://www.luogu.com.cn/problem/solution/CF" + viper.GetString("problem"))
 		}
 	},
 }
