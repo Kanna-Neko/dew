@@ -22,7 +22,7 @@ var random = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			randomMinMax(rating,rating)
+			randomMinMax(rating, rating)
 		} else if len(args) == 2 {
 			minRating, err := strconv.Atoi(args[0])
 			if err != nil {
@@ -32,7 +32,7 @@ var random = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			randomMinMax(minRating,maxRating)
+			randomMinMax(minRating, maxRating)
 		} else {
 			Random()
 		}
@@ -40,18 +40,17 @@ var random = &cobra.Command{
 }
 
 func randomMinMax(min, max int) {
-	if min % 100 != 0 {
-		min = min - min % 100 + 100;
+	if min%100 != 0 {
+		min = min - min%100 + 100
 	}
-	max -= max%100;
-	viper.SetConfigFile("./codeforces/config.yaml")
+	max -= max % 100
 	ReadConfig()
 	var pro []string
-	for i := min; i <= max; i+=100 {
+	for i := min; i <= max; i += 100 {
 		pro = append(pro, strconv.Itoa(i))
 	}
 	var thisOne = PickOneProblem(pro)
-	viper.Set("random", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
+	viper.Set("problem", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
 	err := viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)

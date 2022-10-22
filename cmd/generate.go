@@ -104,7 +104,7 @@ func Random() {
 		pro = append(pro, strconv.Itoa(i))
 	}
 	var thisOne = PickOneProblem(pro)
-	viper.Set("random", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
+	viper.Set("problem", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
 	err := viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)

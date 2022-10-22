@@ -54,6 +54,6 @@ func ReadConfig() {
 	viper.SetConfigFile("./codeforces/config.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("please use cf init first, error : %s\n", err)
 	}
 }

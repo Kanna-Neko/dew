@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"log"
 	"unicode"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -13,9 +15,24 @@ func init() {
 var problem = &cobra.Command{
 	Use:   "problem",
 	Short: "open problem in codeforces",
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		contest, index := splitProblem(args[0])
+		var problem string
+		ReadConfig()
+		if len(args) == 0 {
+			problem = viper.GetString("problem")
+			if problem == "" {
+				log.Fatal("please random or specify a problem")
+			}
+		} else {
+			problem = args[0]
+			viper.Set("problem", problem)
+			err := viper.WriteConfig()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		contest, index := splitProblem(problem)
 		OpenWebsite("https://codeforces.com/problemset/problem/" + contest + "/" + index)
 	},
 }
