@@ -4,8 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/jaxleof/cf-helper/link"
 	"github.com/spf13/cobra"
 )
+
+func init() {
+	rootCmd.AddCommand(loginCmd)
+}
 
 var rootCmd = &cobra.Command{
 	Use:   "cf",
@@ -21,4 +26,12 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+var loginCmd = &cobra.Command{
+	Use:   "login",
+	Short: "manually login",
+	Run: func(cmd *cobra.Command, args []string) {
+		link.ManuallyLogin()
+	},
 }

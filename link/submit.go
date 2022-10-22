@@ -34,10 +34,9 @@ func SubmitCode(contest string, index string, code []byte) {
 		log.Fatal(err)
 	}
 	errText := doc.Find(".error.for__source").First().Text()
-	if errText == "You have submitted exactly the same code before" {
-		log.Fatal("You have submitted exactly the same code before")
+	if errText != "" {
+		log.Fatal(errText)
 	}
-	log.Fatal(res.StatusCode())
 	if err != nil {
 		log.Fatal(err)
 	}
