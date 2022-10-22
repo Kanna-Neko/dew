@@ -27,7 +27,10 @@ var submitCommand = &cobra.Command{
 		if len(args) == 1 {
 			problem = args[0]
 		} else {
-			problem = viper.GetString("random")
+			problem = viper.GetString("problem")
+			if problem == "" {
+				log.Fatal("please specify a problem first")
+			}
 		}
 		contest, index := splitProblem(problem)
 		code, err := ioutil.ReadFile(file)

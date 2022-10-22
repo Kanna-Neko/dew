@@ -9,30 +9,30 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(problem)
+	rootCmd.AddCommand(problemCmd)
 }
 
-var problem = &cobra.Command{
+var problemCmd = &cobra.Command{
 	Use:   "problem",
 	Short: "open problem in codeforces",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		var problem string
+		var problemInfo string
 		ReadConfig()
 		if len(args) == 0 {
-			problem = viper.GetString("problem")
-			if problem == "" {
+			problemInfo = viper.GetString("problem")
+			if problemInfo == "" {
 				log.Fatal("please random or specify a problem")
 			}
 		} else {
-			problem = args[0]
-			viper.Set("problem", problem)
+			problemInfo = args[0]
+			viper.Set("problem", problemInfo)
 			err := viper.WriteConfig()
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
-		contest, index := splitProblem(problem)
+		contest, index := splitProblem(problemInfo)
 		OpenWebsite("https://codeforces.com/problemset/problem/" + contest + "/" + index)
 	},
 }
