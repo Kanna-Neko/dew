@@ -33,7 +33,7 @@ var problemCmd = &cobra.Command{
 			}
 		}
 		contest, index := splitProblem(problemInfo)
-		OpenWebsite(codeforcesDomain + "/problemset/problem/" + contest + "/" + index)
+		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
 	},
 }
 
