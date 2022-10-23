@@ -25,7 +25,15 @@ var submitCommand = &cobra.Command{
 		}
 		var problem string
 		if len(args) == 1 {
-			problem = args[0]
+			if len(args[0]) == 1 {
+				if viper.GetString("race") == "" {
+					log.Fatal("please use cf race first")
+				} else {
+					problem = viper.GetString("race") + args[0]
+				}
+			} else {
+				problem = args[0]
+			}
 		} else {
 			problem = viper.GetString("problem")
 			if problem == "" {

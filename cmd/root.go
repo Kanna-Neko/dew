@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const codeforcesDomain = "https://www.codeforces.com"
+const codeforcesDomain = "https://codeforces.com"
 
 func init() {
 	rootCmd.AddCommand(loginCmd)

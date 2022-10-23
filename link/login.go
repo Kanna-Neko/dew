@@ -16,7 +16,7 @@ import (
 	resty "github.com/go-resty/resty/v2"
 )
 
-const codeforcesDomain = "https://www.codeforces.com"
+const codeforcesDomain = "https://codeforces.com"
 
 var (
 	me        *resty.Client
@@ -85,11 +85,11 @@ func loginAgain() {
 		"handleOrEmail": handle,
 		"password":      password,
 		"remember":      "on",
-	}).Post(codeforcesDomain + "/enter?back=%2F")
+	}).Post("https://codeforces.com/enter?back=%2F")
 	if err != nil {
 		log.Fatal(err)
 	}
-	urL, _ := url.Parse(codeforcesDomain)
+	urL, _ := url.Parse("https://codeforces.com")
 	for _, val := range cookieJar.Cookies(urL) {
 		if val.Name == "39ce7" {
 			viper.Set("cookie.39ce7", val.Value)
