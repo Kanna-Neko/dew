@@ -64,6 +64,17 @@ var testCmd = &cobra.Command{
 				return
 			}
 		}
-		fmt.Println("OK")
+		sp.Stop()
+		if len(input) == 0 {
+			fmt.Println("Warning: sample input is empty")
+		}
+		if len(output) == 0 {
+			fmt.Println("Warning: sample output is empty")
+		}
+		if len(input) == 0 && len(output) == 0 {
+			fmt.Println("please check the validity of problem")
+		}else {
+			fmt.Println("OK")
+		}
 	},
 }
