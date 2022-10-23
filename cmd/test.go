@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -47,6 +48,7 @@ var testCmd = &cobra.Command{
 		sp.Start()
 		input, output := link.GetSample(contest, index)
 		compile := exec.Command("g++", viper.GetString("codeFile"), "-o", "cat")
+		compile.Stderr = os.Stderr
 		defer os.Remove("./cat")
 		compile.Run()
 		for i, v := range input {
@@ -59,7 +61,11 @@ var testCmd = &cobra.Command{
 				sp.Stop()
 				log.Fatal(err)
 			}
-			if string(out) != output[i] {
+			out = bytes.Trim(out, " \n")
+			output[i] = strings.Trim(output[i], " \n")
+			if !bytes.Equal(out, []byte(output[i])) {
+				fmt.Println(out)
+				fmt.Println([]byte(output[i]))
 				sp.Stop()
 				fmt.Printf("oops!\nin:\n%s\nout:\n%s\nanswer:\n%s", v, string(out), output[i])
 				return

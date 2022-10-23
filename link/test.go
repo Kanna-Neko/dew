@@ -21,11 +21,13 @@ func GetSample(contest string, index string) ([]string, []string) {
 	var output []string
 	if doc.Find(".sample-test>.input>pre>div").Length() == 0 {
 		doc.Find(".sample-test>.input").Each(func(i int, dom *goquery.Selection) {
+			dom.Find("pre>br").ReplaceWithHtml("\n")
 			input = append(input, dom.Find("pre").Text())
 		})
 	} else {
 		doc.Find(".sample-test>.input").Each(func(i int, dom *goquery.Selection) {
 			var sam string
+			dom.Find("pre>br").ReplaceWithHtml("\n")
 			dom.Find("pre>.test-example-line").Each(func(i int, s *goquery.Selection) {
 				sam += fmt.Sprintf("%s\n", s.Text())
 			})
@@ -33,6 +35,7 @@ func GetSample(contest string, index string) ([]string, []string) {
 		})
 	}
 	doc.Find(".sample-test>.output").Each(func(i int, dom *goquery.Selection) {
+		dom.Find("pre>br").ReplaceWithHtml("\n")
 		output = append(output, dom.Find("pre").Text())
 	})
 	return input, output
