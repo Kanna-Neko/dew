@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,19 +20,24 @@ var tutorial = &cobra.Command{
 	Short: "as the name says",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		ReadConfig()
+		var problem string
 		if len(args) == 1 {
-			OpenWebsite(luoguDomain + "/problem/solution/CF" + args[0])
-		} else {
-			_, err := os.Stat("./codeforces/config.yaml")
-			isExist := os.IsNotExist(err)
-			if isExist {
-				log.Fatal("config file is not exist, please use cf init command")
+			if len(args[0]) == 1 {
+				if viper.GetString("race") == "" {
+					log.Fatal("please use cf race first")
+				} else {
+					problem = viper.GetString("race") + args[0]
+				}
+			} else {
+				problem = args[0]
 			}
-			ReadConfig()
-			if viper.GetString("problem") == "" {
+		} else {
+			problem = viper.GetString("problem")
+			if problem == "" {
 				log.Fatal("please specify a problem first")
 			}
-			OpenWebsite(luoguDomain + "/problem/solution/CF" + viper.GetString("problem"))
 		}
+		OpenWebsite(luoguDomain + "/problem/solution/CF" + problem)
 	},
 }
