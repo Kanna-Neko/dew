@@ -61,13 +61,12 @@ var testCmd = &cobra.Command{
 				sp.Stop()
 				log.Fatal(err)
 			}
+			v = strings.Trim(v, " \n")
 			out = bytes.Trim(out, " \n")
 			output[i] = strings.Trim(output[i], " \n")
 			if !bytes.Equal(out, []byte(output[i])) {
-				fmt.Println(out)
-				fmt.Println([]byte(output[i]))
 				sp.Stop()
-				fmt.Printf("oops!\nin:\n%s\nout:\n%s\nanswer:\n%s", v, string(out), output[i])
+				fmt.Printf("oops!\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s", v, string(out), output[i])
 				return
 			}
 		}
