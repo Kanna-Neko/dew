@@ -15,7 +15,7 @@ func init() {
 
 var submitCommand = &cobra.Command{
 	Use:   "submit",
-	Short: "submit",
+	Short: "submit problem",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ReadConfig()
