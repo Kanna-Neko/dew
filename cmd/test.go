@@ -44,6 +44,7 @@ var testCmd = &cobra.Command{
 		contest, index := splitProblem(problem)
 		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 		sp.Prefix = "testing "
+		sp.Start()
 		input, output := link.GetSample(contest, index)
 		compile := exec.Command("g++", viper.GetString("codeFile"), "-o", "cat")
 		defer os.Remove("./cat")
@@ -73,7 +74,7 @@ var testCmd = &cobra.Command{
 		}
 		if len(input) == 0 && len(output) == 0 {
 			fmt.Println("please check the validity of problem")
-		}else {
+		} else {
 			fmt.Println("OK")
 		}
 	},
