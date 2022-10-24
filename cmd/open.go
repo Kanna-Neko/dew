@@ -7,14 +7,12 @@ import (
 	"strconv"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func init() {
 	Open.AddCommand(OpenGyms)
 	Open.AddCommand(OpenMashup)
 	Open.AddCommand(OpenStatus)
-	Open.AddCommand(OpenRandom)
 	rootCmd.AddCommand(Open)
 }
 
@@ -53,22 +51,6 @@ var OpenStatus = &cobra.Command{
 	Short: "a shortcut of opening codeforces status",
 	Run: func(cmd *cobra.Command, args []string) {
 		OpenWebsite(codeforcesDomain + "/problemset/status?my=on")
-	},
-}
-
-var OpenRandom = &cobra.Command{
-	Use:   "random",
-	Short: "a shortcut of opening codeforces status",
-	Run: func(cmd *cobra.Command, args []string) {
-		if !checkConfigFile() {
-			log.Fatal("config file is not exist, please use cf init command")
-		}
-		ReadConfig()
-		var name = viper.GetString("random")
-		if name == "" {
-			log.Fatal("please use cf random command first")
-		}
-		OpenWebsite(codeforcesDomain + "/problemset/problem/" + name[:len(name)-1] + "/" + name[len(name)-1:])
 	},
 }
 
