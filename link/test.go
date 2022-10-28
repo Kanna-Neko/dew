@@ -3,17 +3,21 @@ package link
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
 func GetSample(contest string, index string) ([]string, []string) {
-	res, err := http.Get(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+	setProxy()
+	res, err := me.R().SetDoNotParseResponse(true).Get(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
 	if err != nil {
 		log.Fatal(err)
 	}
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if res.IsSuccess() {
+		log.Fatal("request error: " + res.Status())
+	}
+	defer res.RawBody().Close()
+	doc, err := goquery.NewDocumentFromReader(res.RawBody())
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -48,6 +48,7 @@ func Login() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	setProxy()
 	if checkLoginAgain() {
 		loginAgain()
 	} else {
@@ -85,11 +86,11 @@ func loginAgain() {
 		"handleOrEmail": handle,
 		"password":      password,
 		"remember":      "on",
-	}).Post("https://codeforces.com/enter?back=%2F")
+	}).Post(codeforcesDomain + "/enter?back=%2F")
 	if err != nil {
 		log.Fatal(err)
 	}
-	urL, _ := url.Parse("https://codeforces.com")
+	urL, _ := url.Parse(codeforcesDomain)
 	for _, val := range cookieJar.Cookies(urL) {
 		if val.Name == "39ce7" {
 			viper.Set("cookie.39ce7", val.Value)
@@ -128,4 +129,15 @@ func reloadCookie() {
 		Value: viper.GetString("cookie.JSESSIONID"),
 	})
 	csrf = viper.GetString("cookie.csrf")
+}
+
+func setProxy() {
+	viper.SetConfigFile("./codeforces/config.yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if viper.IsSet("proxy") {
+		me.SetProxy(viper.GetString("proxy"))
+	}
 }

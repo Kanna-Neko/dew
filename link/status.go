@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"strconv"
 )
 
@@ -37,17 +36,9 @@ type Problem struct {
 }
 
 func QueryStatus(handle string) map[string]bool {
-	res, err := http.Get(codeforcesDomain + "/api/user.status?handle=" + handle)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
 	var status UsersStatusApi
-	err = json.Unmarshal(body, &status)
+	setProxy()
+	_, err := me.R().SetResult(&status).Get(codeforcesDomain + "/api/user.status?handle=" + handle)
 	if err != nil {
 		log.Fatal(err)
 	}
