@@ -46,5 +46,6 @@ var submitCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 		link.SubmitCode(contest, index, code)
+		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/my")
 	},
 }
