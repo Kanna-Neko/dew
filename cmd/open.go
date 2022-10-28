@@ -10,13 +10,13 @@ import (
 )
 
 func init() {
-	Open.AddCommand(OpenGyms)
-	Open.AddCommand(OpenMashup)
-	Open.AddCommand(OpenStatus)
-	rootCmd.AddCommand(Open)
+	OpenCmd.AddCommand(OpenGyms)
+	OpenCmd.AddCommand(OpenMashup)
+	rootCmd.AddCommand(OpenStatus)
+	rootCmd.AddCommand(OpenCmd)
 }
 
-var Open = &cobra.Command{
+var OpenCmd = &cobra.Command{
 	Use:   "open",
 	Short: "a shortcut of opening codeforces website",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -78,5 +78,5 @@ func OpenWebsite(path string) {
 }
 
 func OpenRandomFunc(info problemInfo) {
-	OpenWebsite(codeforcesDomain + "/problemset/problem/" + strconv.Itoa(info.ContestId) + "/" + info.Index)
+	OpenWebsite(codeforcesDomain + "/contest/" + strconv.Itoa(info.ContestId) + "/problem/" + info.Index)
 }
