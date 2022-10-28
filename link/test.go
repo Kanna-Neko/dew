@@ -13,7 +13,7 @@ func GetSample(contest string, index string) ([]string, []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.IsSuccess() {
+	if !res.IsSuccess() {
 		log.Fatal("request error: " + res.Status())
 	}
 	defer res.RawBody().Close()
