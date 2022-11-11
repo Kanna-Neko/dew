@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	
 	log.SetFlags(log.Flags() | log.Lshortfile)
 	cmd.Execute()
 }
