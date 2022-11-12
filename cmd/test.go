@@ -11,6 +11,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/cf-helper/link"
+	testmanager "github.com/jaxleof/cf-helper/testManager"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -42,17 +43,16 @@ var testCmd = &cobra.Command{
 				log.Fatal("please specify a problem first")
 			}
 		}
-		contest, index := splitProblem(problem)
+		tests := GetTestcases(problem)
 		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 		sp.Prefix = "testing "
 		sp.Start()
-		input, output := link.GetSample(contest, index)
 		compile := exec.Command("g++", viper.GetString("codeFile"), "-o", "cat")
 		compile.Stderr = os.Stderr
 		defer os.Remove("./cat")
 		compile.Run()
-		for i, v := range input {
-			in := strings.NewReader(v)
+		for _, v := range tests.Tests {
+			in := strings.NewReader(v.Input)
 			cmd := exec.Command("./cat")
 			cmd.Stdin = in
 			cmd.Stderr = os.Stderr
@@ -61,26 +61,43 @@ var testCmd = &cobra.Command{
 				sp.Stop()
 				log.Fatal(err)
 			}
-			v = strings.Trim(v, " \n")
+			v.Input = strings.Trim(v.Input, " \n")
 			out = bytes.Trim(out, " \n")
-			output[i] = strings.Trim(output[i], " \n")
-			if !bytes.Equal(out, []byte(output[i])) {
+			v.Output = strings.Trim(v.Output, " \n")
+			if !bytes.Equal(out, []byte(v.Output)) {
 				sp.Stop()
-				fmt.Printf("oops!\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s", v, string(out), output[i])
+				fmt.Printf("oops!\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s", v.Input, string(out), v.Output)
 				return
 			}
 		}
 		sp.Stop()
-		if len(input) == 0 {
-			fmt.Println("Warning: sample input is empty")
-		}
-		if len(output) == 0 {
-			fmt.Println("Warning: sample output is empty")
-		}
-		if len(input) == 0 && len(output) == 0 {
-			fmt.Println("please check the validity of problem")
+		if len(tests.Tests) == 0 {
+			fmt.Println("Warning: sample is empty")
 		} else {
 			fmt.Println("OK")
 		}
 	},
+}
+
+func GetTestcases(problem string) testmanager.Testcases {
+	sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	sp.Prefix = "geting TestCases "
+	sp.Start()
+	defer sp.Stop()
+	contest, index := splitProblem(problem)
+	var manager = testmanager.ExtractManager()
+	manager = testmanager.ManagerPush(manager, problem)
+	manager = testmanager.ManagerDeleteExtra(manager)
+	testmanager.StoreManager(manager)
+	if testmanager.IsTestcaseExist(problem) {
+		return testmanager.ExtractTestcase(problem)
+	} else {
+		input, output := link.GetSample(contest, index)
+		var res testmanager.Testcases
+		for i := 0; i < len(input); i++ {
+			res.Tests = append(res.Tests, testmanager.Testcase{Input: input[i], Output: output[i]})
+		}
+		testmanager.StoreProblemTest(problem, res)
+		return res
+	}
 }

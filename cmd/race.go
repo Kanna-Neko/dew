@@ -3,6 +3,7 @@ package cmd
 import (
 	"log"
 
+	"github.com/jaxleof/cf-helper/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -22,6 +23,10 @@ var raceCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		OpenWebsite(codeforcesDomain + "/contest/" + args[0])
+		problems := link.GetContestProblems(args[0])
+		// spi := spinner.New()
+		for _, v := range problems {
+			GetTestcases(v)
+		}
 	},
 }

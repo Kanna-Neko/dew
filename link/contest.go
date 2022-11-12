@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"strconv"
 	"sync"
 	"time"
 
@@ -112,7 +113,19 @@ func CreateContest(title string, duration string, problems []string) {
 	cj.Stop()
 }
 
-type ProblemJson struct {
-	Id    string `json:"id"`
-	Index string `json:"index"`
+func GetContestProblems(contestId string) []string {
+	var res ContestStandingInterface
+	response, err := me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=jaxleof&showUnofficial=true")
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(response.Body(), &res)
+	if res.Status != "OK" {
+		log.Fatal(res.Comment)
+	}
+	var problems []string
+	for _, v := range res.Result.Problems {
+		problems = append(problems, strconv.Itoa(v.ContestId)+v.Index)
+	}
+	return problems
 }

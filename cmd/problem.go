@@ -34,6 +34,7 @@ var problemCmd = &cobra.Command{
 		}
 		contest, index := splitProblem(problemInfo)
 		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+		GetTestcases(args[0])
 	},
 }
 
