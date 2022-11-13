@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -15,6 +16,12 @@ func init() {
 var templateCmd = &cobra.Command{
 	Use:   "template",
 	Short: "generate template",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		if !checkConfigFile() {
+			log.Fatal("config file is not exist, please use init command")
+		}
+		ReadConfig()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := os.Stat("./codeforces/default.cpp")
 		isNotExist := os.IsNotExist(err)
@@ -25,6 +32,6 @@ var templateCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		ioutil.WriteFile("main.cpp", codeContent, 0777)
+		ioutil.WriteFile(viper.GetString("codefile"), codeContent, 0777)
 	},
 }

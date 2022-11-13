@@ -25,7 +25,7 @@ var tutorial = &cobra.Command{
 		if len(args) == 1 {
 			if len(args[0]) == 1 {
 				if viper.GetString("race") == "" {
-					log.Fatal("please use cf race first")
+					log.Fatal("please use race command first")
 				} else {
 					problem = viper.GetString("race") + args[0]
 				}

@@ -84,7 +84,7 @@ func Random() {
 	}
 	ReadConfig()
 	if !viper.IsSet("rating") {
-		log.Fatal("we notice the info of rating is not exist, please use cf init config command first, or modify rating in ./codeforces/config.yaml (you can add a line and write 'rating: 1234').")
+		log.Fatal("we notice the info of rating is not exist, please use init config command first, or modify rating in ./codeforces/config.yaml (you can add a line and write 'rating: 1234').")
 	}
 	var rating = viper.GetInt("rating")
 	if rating < 800 {
@@ -150,7 +150,7 @@ func PickProblems(in []string) []problemInfo {
 	for i := 0; i < len(in); i++ {
 		data, err := ioutil.ReadFile("./codeforces/" + in[i] + ".json")
 		if err != nil {
-			log.Fatal(err.Error() + "\nyou should use cf update before generate")
+			log.Fatal(err.Error() + "\nyou should use update command before generate")
 		}
 		var tmp []problemInfo
 		json.Unmarshal(data, &tmp)

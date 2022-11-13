@@ -24,7 +24,6 @@ var raceCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 		problems := link.GetContestProblems(args[0])
-		// spi := spinner.New()
 		for _, v := range problems {
 			GetTestcases(v)
 		}
