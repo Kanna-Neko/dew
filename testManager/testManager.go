@@ -55,7 +55,10 @@ func ManagerPush(manager Manager, problem string) Manager {
 	return manager
 }
 
-func ManagerDeleteExtra(manager Manager) Manager{
+func ManagerDeleteExtra(manager Manager) Manager {
+	for i := 50; i < len(manager.Problems); i++ {
+		os.Remove(testFilesDir + manager.Problems[i] + ".json")
+	}
 	if len(manager.Problems) > 50 {
 		manager.Problems = manager.Problems[0:50]
 	}
