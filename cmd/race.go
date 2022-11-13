@@ -3,7 +3,7 @@ package cmd
 import (
 	"log"
 
-	"github.com/jaxleof/cf-helper/link"
+	"github.com/jaxleof/dew/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

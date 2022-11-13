@@ -1,4 +1,4 @@
-module github.com/jaxleof/cf-helper
+module github.com/jaxleof/dew
 
 go 1.18
 

@@ -14,7 +14,7 @@ func init() {
 
 var random = &cobra.Command{
 	Use:   "random",
-	Short: "alias to cf generate random",
+	Short: "alias to dew generate random",
 	Args:  cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {

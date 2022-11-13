@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/jaxleof/cf-helper/cmd"
+	"github.com/jaxleof/dew/cmd"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jaxleof/cf-helper/link"
+	"github.com/jaxleof/dew/link"
 
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"

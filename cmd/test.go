@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
-	"github.com/jaxleof/cf-helper/link"
-	testmanager "github.com/jaxleof/cf-helper/testManager"
+	"github.com/jaxleof/dew/link"
+	testmanager "github.com/jaxleof/dew/testManager"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
