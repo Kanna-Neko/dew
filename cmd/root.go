@@ -17,7 +17,7 @@ func init() {
 var rootCmd = &cobra.Command{
 	Use:   "dew",
 	Short: "dew is a contest generator",
-	Long:  `A contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random or custom`,
+	Long:  `A assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
