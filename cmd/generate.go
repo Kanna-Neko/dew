@@ -95,7 +95,7 @@ func Random() {
 	if lowRating > 3500 {
 		lowRating = 3500
 	}
-	highRating := rating + 500
+	highRating := rating + 3
 	if highRating > 3500 {
 		highRating = 3500
 	}

@@ -13,7 +13,7 @@ func init() {
 }
 
 var random = &cobra.Command{
-	Use:   "random",
+	Use:   "random [lowPoint [highPoint]]",
 	Short: "alias to dew generate random",
 	Args:  cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

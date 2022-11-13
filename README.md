@@ -2,7 +2,7 @@
 
 A assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random.
 
-I suggest you use 'dew random' command, which will generate one problem whose difficulty base your rating [+200, +500] 
+I suggest you use 'dew random' command, which will generate one problem whose difficulty base your rating [+200, +300] 
 
 ## Usage
 ```shell
