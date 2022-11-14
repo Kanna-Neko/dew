@@ -25,16 +25,24 @@ var problemCmd = &cobra.Command{
 				log.Fatal("please random or specify a problem")
 			}
 		} else {
-			problemInfo = args[0]
-			viper.Set("problem", problemInfo)
-			err := viper.WriteConfig()
-			if err != nil {
-				log.Fatal(err)
+			if len(args[0]) == 1 {
+				contest := viper.GetString("race")
+				if contest == "" {
+					log.Fatal("please use race command first")
+				}
+				problemInfo = contest + args[0]
+			} else {
+				problemInfo = args[0]
+				viper.Set("problem", problemInfo)
+				err := viper.WriteConfig()
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 		contest, index := splitProblem(problemInfo)
 		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
-		GetTestcases(args[0])
+		GetTestcases(problemInfo)
 	},
 }
 
