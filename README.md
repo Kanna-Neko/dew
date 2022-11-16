@@ -75,6 +75,7 @@ If you want to change language, you can use dew lang {language shortcut}
 
 example:
 ```shell
+dew lang
 dew lang python3
 ```
 ## dew template

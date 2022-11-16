@@ -74,6 +74,7 @@ Use "dew [command] --help" for more information about a command.
 
 example:
 ```shell
+dew lang
 dew lang python3
 ```
 ## dew template
