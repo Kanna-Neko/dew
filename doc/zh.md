@@ -6,7 +6,7 @@ dew是一个可以帮助你测试并提交代码到codeforces的软件，并且�
 
 我推荐你使用`dew random` 命令， 它可以随机从题库中挑选一道符合你水平的题目，这道题目的分数是你的评分[+200,+300]
 
-## basic Usage
+## 基础使用
 ```shell
 # 放轻松，这很简单
 dew init
@@ -89,7 +89,7 @@ The program will create all template file in your template dir when you use temp
 
 如果你没有添加任何模板名，那么相当于你使用了`dew template default`
 
-提示: 你可以同时使用超过一个模板名像`dew template hello1 hello2`，所有在`./codeforces/hello1/`中的文件将会被先创建出来，所有不同于`./codeforces/hello2/`中的文件将会被后创建出来
+提示: 你可以同时使用超过一个模板名像`dew template hello1 hello2`，所有在`./codeforces/hello1/`中的文件将会被先创建出来，所有不同于前者但存在于`./codeforces/hello2/`中的文件将会被后创建出来
 
 快捷命令是`dew tmp`
 
