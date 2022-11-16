@@ -4,17 +4,23 @@ A assistant which can help you test your program you will submit on codeforces. 
 
 I suggest you use 'dew random' command, which will generate one problem whose difficulty base your rating [+200, +300] 
 
-## Usage
+## basic Usage
 ```shell
+# relax yourself and enjoy it, it's easy.
 dew init
 # waiting for your exploration
-vim main.cpp # write your program, we promise use main.cpp as submit code file.
+# original language is c++, you can use lang [language] change language program use.
+# you can use lang command and check all language we support.
+# write your program, we promise use dew.cpp as original submit code file.
+# you can rewrite codefile in ./codeforces/config.yaml for different language
+# codefile is code program will test and submit
+vim dew.cpp
 dew test 1749A
 dew submit 1749A
 
 # race mode
 dew race 1749
-vim main.cpp
+vim dew.cpp
 dew test A
 dew submit A
 
@@ -31,7 +37,7 @@ dew submit
 
 ## dew command
 ```shell
-A contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random or custom
+A assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random
 
 Usage:
   dew [flags]
@@ -43,7 +49,8 @@ Available Commands:
   generate    create a contest
   help        Help about any command
   init        init somethings
-  login       manually login
+  lang        switch program language
+  login       manually login #maybe you will use when token is expired
   open        a shortcut of opening codeforces website
   problem     open problem in codeforces
   race        set contest env
@@ -61,6 +68,58 @@ Flags:
 Use "dew [command] --help" for more information about a command.
 ```
 
+## dew lang
+The program will show current and total choice you can choose when nothing after command
+
+If you want to change language, you can use dew lang {language shortcut}
+## dew template
+mkdir in ./codeforces/template/{your template dir name}
+
+You can write your template into ./codeforces/template/{your template dir name}/{template file name}
+
+The program will show all template you create when you use -a flag `dew template -a`
+
+The program will create all template file in your template dir when you use template command, for instance `dew template hello`, all file in `./codeforces/hello/` will be created in current path.
+
+If you don't fill anything after dew template, It's alias `dew template default`
+
+ps:You can fill in more than one template name after the command like `dew template hello1 hello2`, all file in `./codeforces/hello1/` will be created first, distinct filename in `./codeforces/hello2/` will be created next.
+
+The shortcut is dew tmp
+
+example:
+```shell
+dew template -a
+dew template
+# or 
+dew tmp -a
+dew tmp
+
+
+# please create template hello first.
+dew template hello
+
+# please create template basic and gcd first.
+# if there are some filename is coincident same, files that appear after will not be created.
+dew template basic gcd
+```
+
+## dew random
+random command will specify a problem for your current rating \[+200, +300\], and you can specify a detailed rating or range rating you want.
+
+example:
+```shell
+dew random
+dew random 1800
+dew random 1000 1200
+```
+
+## proxy set
+```shell
+# after dew init
+dew env -w proxy=http://127.0.0.1:41019
+# replace http://127.0.0.1:41019 with your proxy server
+```
 ## Technology Stack
 1. [cobra](https://github.com/spf13/cobra)
 2. [resty](https://github.com/go-resty/resty)
