@@ -52,10 +52,11 @@ int main() {
     return 0;
 }
 `
+const templateDir = "./codeforces/template/"
+const testFilesDir = "./codeforces/testFiles/"
 
 func init() {
 	rootCmd.AddCommand(InitCmd)
-	InitCmd.AddCommand(InitDefaultCpp)
 }
 
 var InitCmd = &cobra.Command{
@@ -64,22 +65,7 @@ var InitCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		configFunc()
 		updateFunc()
-		setDefaultCpp("./codeforces/default.cpp")
 	},
-}
-var InitDefaultCpp = &cobra.Command{
-	Use:   "cpp",
-	Short: "init default cpp file",
-	Run: func(cmd *cobra.Command, args []string) {
-		setDefaultCpp("./codeforces/default.cpp")
-	},
-}
-
-func setDefaultCpp(path string) {
-	err := ioutil.WriteFile(path, []byte(defaultCpp), 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func configFunc() {
@@ -100,6 +86,8 @@ func configFunc() {
 	initLang()
 	viper.WriteConfig()
 	fmt.Println("handle and password save into ./codeforces/config.yaml")
+	initTmplate()
+	initTestManager()
 	cj := uispinner.New()
 	defer cj.Stop()
 	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating is initing").SetComplete("user rating init complete")
@@ -120,5 +108,22 @@ func initLang() {
 	viper.Set("lang", "c++")
 	for k, v := range lang.LangDic {
 		viper.Set("codefile."+k, v.OriginalCodefile)
+	}
+}
+
+func initTmplate() {
+	err := os.MkdirAll(templateDir+"default", 0777)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile(templateDir+"default/dew.cpp", []byte(defaultCpp), 0777)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+func initTestManager() {
+	err := os.MkdirAll(testFilesDir, 0777)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

@@ -14,10 +14,6 @@ const (
 )
 
 func init() {
-	err := os.MkdirAll(testFilesDir, 0777)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func StoreProblemTest(problem string, tests Testcases) {
