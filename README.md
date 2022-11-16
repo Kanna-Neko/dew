@@ -1,6 +1,6 @@
 # dew
 
-lang: en/[zh](./doc/zh.md)
+language: en/[zh](./doc/zh.md)
 
 dew is a assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random.
 
