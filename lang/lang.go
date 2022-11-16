@@ -14,7 +14,7 @@ type Lang struct {
 	Name             string
 }
 
-var LangSlice = []string{"c", "c++", "c++17", "go"}
+var LangSlice = []string{"c", "c++", "c++17", "go", "python3"}
 
 //language dictionary
 var LangDic map[string]Lang = map[string]Lang{
@@ -49,5 +49,13 @@ var LangDic map[string]Lang = map[string]Lang{
 		ProgramTypeId:    "32",
 		OriginalCodefile: "dew.go",
 		Name:             "Go 1.19",
+	},
+	"python3": {
+		IsComplieLang:    true,
+		CompileCode:      func(codefile string) *exec.Cmd { return exec.Command("") },
+		RunCode:          func(codefile string) *exec.Cmd { return exec.Command("python3", codefile) },
+		ProgramTypeId:    "31",
+		OriginalCodefile: "dew.py",
+		Name:             "Python 3.8.10",
 	},
 }
