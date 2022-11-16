@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/jaxleof/dew/lang"
 	"github.com/jaxleof/dew/link"
 	testmanager "github.com/jaxleof/dew/testManager"
 	"github.com/spf13/cobra"
@@ -43,17 +43,24 @@ var testCmd = &cobra.Command{
 				log.Fatal("please specify a problem first")
 			}
 		}
+		language := viper.GetString("lang")
+		lan, ok := lang.LangDic[language]
+		if !ok {
+			log.Fatal("don't support language: " + language)
+		}
 		tests := GetTestcases(problem)
 		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 		sp.Prefix = "testing "
 		sp.Start()
-		compile := exec.Command("g++", viper.GetString("codeFile"), "-o", "cat")
-		compile.Stderr = os.Stderr
-		defer os.Remove("./cat")
-		compile.Run()
+		if lan.IsComplieLang {
+			compile := lan.CompileCode(viper.GetString("codefile." + language))
+			compile.Stderr = os.Stderr
+			defer os.Remove("./cat")
+			compile.Run()
+		}
 		for _, v := range tests.Tests {
 			in := strings.NewReader(v.Input)
-			cmd := exec.Command("./cat")
+			cmd := lan.RunCode(viper.GetString("codefile." + language))
 			cmd.Stdin = in
 			cmd.Stderr = os.Stderr
 			out, err := cmd.Output()

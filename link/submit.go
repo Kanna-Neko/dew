@@ -10,7 +10,7 @@ import (
 	"github.com/briandowns/spinner"
 )
 
-func SubmitCode(contest string, index string, code []byte) {
+func SubmitCode(contest string, index string, code []byte, programTypeId string) {
 	Login()
 	sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 	sp.Prefix = "AC!!! "
@@ -21,7 +21,7 @@ func SubmitCode(contest string, index string, code []byte) {
 		"action":                "submitSolutionFormSubmitted",
 		"contestId":             contest,
 		"submittedProblemIndex": index,
-		"programTypeId":         "61",
+		"programTypeId":         programTypeId,
 		"source":                string(code),
 		"tabSize":               "4",
 	}).Post(fmt.Sprintf(codeforcesDomain+"/contest/%s/submit?csrf_token=%s", contest, csrf))

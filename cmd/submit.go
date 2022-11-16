@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/jaxleof/dew/lang"
 	"github.com/jaxleof/dew/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -17,9 +18,11 @@ var submitCommand = &cobra.Command{
 	Use:   "submit",
 	Short: "submit problem",
 	Args:  cobra.MaximumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	PreRun: func(cmd *cobra.Command, args []string) {
 		ReadConfig()
-		file := viper.GetString("codeFile")
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		file := viper.GetString("codeFile." + viper.GetString("lang"))
 		if file == "" {
 			log.Fatal("please check codeFile field in ./codeforces/config.yaml")
 		}
@@ -45,7 +48,12 @@ var submitCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		link.SubmitCode(contest, index, code)
+		language := viper.GetString("lang")
+		lan, ok := lang.LangDic[language]
+		if !ok {
+			log.Fatal("don't support language: " + language)
+		}
+		link.SubmitCode(contest, index, code, lan.ProgramTypeId)
 		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/my")
 	},
 }

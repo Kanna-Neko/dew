@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/jaxleof/dew/lang"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -21,11 +22,15 @@ var envSet = map[string]bool{
 	"problem":  true,
 	"race":     true,
 	"proxy":    true,
-	"codefile": true,
+	"lang":     true,
 }
+var envSlice = []string{"handle", "password", "rating", "problem", "race", "proxy", "lang", "codefile"}
 
 func init() {
 	env.PersistentFlags().BoolVarP(&modify, "write", "w", false, `you can modify env like "env -w proxy=http://127.0.0.1:20245" when you use flag -w or --write`)
+	for k := range lang.LangDic {
+		envSet["codefile."+k] = true
+	}
 	rootCmd.AddCommand(env)
 }
 
@@ -40,7 +45,10 @@ var env = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			fmt.Printf("handle: %v\npassword: %v\nrating:%v\nproblem: %v\nrace: %v\nproxy: %v\ncodefile: %v\n", viper.Get("handle"), viper.Get("password"), viper.Get("rating"), viper.Get("problem"), viper.Get("race"), viper.Get("proxy"), viper.Get("codefile"))
+			// fmt.Printf("handle: %v\npassword: %v\nrating:%v\nproblem: %v\nrace: %v\nproxy: %v\ncodefile: %v\n", viper.Get("handle"), viper.Get("password"), viper.Get("rating"), viper.Get("problem"), viper.Get("race"), viper.Get("proxy"), viper.Get("codefile"))
+			for _, arg := range envSlice {
+				fmt.Printf("%s: %v\n", arg, viper.Get(arg))
+			}
 			return
 		}
 		if !modify {

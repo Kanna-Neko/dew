@@ -14,8 +14,9 @@ func init() {
 }
 
 var templateCmd = &cobra.Command{
-	Use:   "template",
-	Short: "generate template",
+	Use:     "template",
+	Short:   "generate template",
+	Aliases: []string{"tmp"},
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if !checkConfigFile() {
 			log.Fatal("config file is not exist, please use init command")
