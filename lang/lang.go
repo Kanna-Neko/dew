@@ -51,7 +51,7 @@ var LangDic map[string]Lang = map[string]Lang{
 		Name:             "Go 1.19",
 	},
 	"python3": {
-		IsComplieLang:    true,
+		IsComplieLang:    false,
 		CompileCode:      func(codefile string) *exec.Cmd { return exec.Command("") },
 		RunCode:          func(codefile string) *exec.Cmd { return exec.Command("python3", codefile) },
 		ProgramTypeId:    "31",
