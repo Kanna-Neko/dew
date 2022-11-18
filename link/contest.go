@@ -75,7 +75,7 @@ func CreateContest(title string, duration string, problems []string) {
 	for i, problem := range problems {
 		group.Add(1)
 		x := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix(problem + " problem clawing").SetComplete(problem + " claw complete")
-		go func(index int) {
+		go func(index int, problem string) {
 			id, err := QueryProbelmId(problems[index])
 			if err != nil {
 				cj.Stop()
@@ -86,7 +86,7 @@ func CreateContest(title string, duration string, problems []string) {
 			problemsJson[index].Index = string(rune(('A' + index)))
 			group.Done()
 			x.Done()
-		}(i)
+		}(i, problem)
 	}
 	group.Wait()
 	data, err := json.Marshal(problemsJson)
