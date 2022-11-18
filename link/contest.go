@@ -72,24 +72,21 @@ func CreateContest(title string, duration string, problems []string) {
 	cj.Start()
 	var problemsJson = make([]ProblemJson, len(problems))
 	var group = new(sync.WaitGroup)
-	var lock = new(sync.RWMutex)
-	for i := 0; i < len(problems); i++ {
+	for i, problem := range problems {
 		group.Add(1)
-		x := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix(problems[i] + " problem clawing").SetComplete(problems[i] + " claw complete")
-		go func(index int) {
+		x := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix(problem + " problem clawing").SetComplete(problem + " claw complete")
+		go func(index int, problem string) {
 			id, err := QueryProbelmId(problems[index])
 			if err != nil {
 				cj.Stop()
 				log.Fatalln(err)
 				return
 			}
-			lock.Lock()
 			problemsJson[index].Id = id
 			problemsJson[index].Index = string(rune(('A' + index)))
-			lock.Unlock()
 			group.Done()
 			x.Done()
-		}(i)
+		}(i, problem)
 	}
 	group.Wait()
 	data, err := json.Marshal(problemsJson)
