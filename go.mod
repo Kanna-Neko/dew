@@ -8,7 +8,7 @@ require (
 	github.com/charmbracelet/bubbletea v0.23.1
 	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/jaxleof/uispinner v1.1.1
+	github.com/jaxleof/uispinner v1.0.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 )
@@ -53,5 +53,5 @@ require (
 	github.com/gosuri/uilive v0.0.4 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	golang.org/x/net v0.2.0 // indirect
-	golang.org/x/sys v0..
+	golang.org/x/sys v0.2.0 // indirect
 )
