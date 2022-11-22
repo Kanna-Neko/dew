@@ -2,6 +2,10 @@ package link
 
 import (
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/hex"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
@@ -9,6 +13,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/dlclark/regexp2"
 	"github.com/jaxleof/uispinner"
 	"github.com/spf13/viper"
 
@@ -61,7 +66,7 @@ func checkLoginAgain() bool {
 	if time.Now().Unix() > t {
 		return true
 	}
-	if !viper.IsSet("cookie.csrf") || !viper.IsSet("cookie.JSESSIONID") || !viper.IsSet("cookie.39ce7") {
+	if !viper.IsSet("cookie.csrf") || !viper.IsSet("cookie.JSESSIONID") || !viper.IsSet("cookie.39ce7") || !viper.IsSet("cookie.rcpc") {
 		return true
 	}
 	return false
@@ -81,6 +86,14 @@ func loginAgain() {
 	defer cj.Stop()
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("logining").SetComplete("login complete")
 	defer login.Done()
+	rcpc, isExist := getRCPC()
+	if isExist {
+		viper.Set("cookie.rcpc", rcpc)
+		me.SetCookie(&http.Cookie{
+			Name:  "RCPC",
+			Value: rcpc,
+		})
+	}
 	res, err := me.R().SetFormData(map[string]string{
 		"action":        "enter",
 		"handleOrEmail": handle,
@@ -128,6 +141,10 @@ func reloadCookie() {
 		Name:  "JSESSIONID",
 		Value: viper.GetString("cookie.JSESSIONID"),
 	})
+	me.SetCookie(&http.Cookie{
+		Name:  "RCPC",
+		Value: viper.GetString("cookie.rcpc"),
+	})
 	csrf = viper.GetString("cookie.csrf")
 }
 
@@ -140,4 +157,58 @@ func setProxy() {
 	if viper.IsSet("proxy") {
 		me.SetProxy(viper.GetString("proxy"))
 	}
+}
+func getRCPC() (string, bool) {
+	res, err := me.R().Get(codeforcesDomain)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if len(res.Body()) > 800 {
+		return "", false
+	}
+	return decrypterRCPC(getParameter(string(res.Body()))), true
+}
+func getParameter(in string) (string, string, string) {
+	res, err := regexp2.Compile(`(?<=a=toNumbers\(")\w+(?="\))`, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	m, err := res.FindStringMatch(in)
+	if err != nil {
+		log.Fatal(err)
+	}
+	key := m.Group.Captures[0].String()
+	res, err = regexp2.Compile(`(?<=b=toNumbers\(")\w+(?="\))`, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	m, err = res.FindStringMatch(in)
+	if err != nil {
+		log.Fatal(err)
+	}
+	iv := m.Group.Captures[0].String()
+	res, err = regexp2.Compile(`(?<=c=toNumbers\(")\w+(?="\))`, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	m, err = res.FindStringMatch(in)
+	if err != nil {
+		log.Fatal(err)
+	}
+	cipher := m.Group.Captures[0].String()
+	return cipher, key, iv
+}
+
+func decrypterRCPC(ocipher, okey, oiv string) string {
+	key, _ := hex.DecodeString(okey)
+	iv, _ := hex.DecodeString(oiv)
+	ciphertext, _ := hex.DecodeString(ocipher)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+	mode := cipher.NewCBCDecrypter(block, iv)
+	mode.CryptBlocks(ciphertext, ciphertext)
+	return fmt.Sprintf("%x", ciphertext)
 }
