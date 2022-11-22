@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"log"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/jaxleof/dew/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,7 +25,12 @@ var raceCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		sp := spinner.New(spinner.CharSets[34], 100*time.Millisecond)
+		sp.FinalMSG = "get contest info completed"
+		sp.Prefix = "geting contest info "
+		sp.Start()
 		problems := link.GetContestProblems(args[0])
+		sp.Stop()
 		for _, v := range problems {
 			GetTestcases(v)
 		}
