@@ -111,7 +111,7 @@ func loginAgain() {
 			viper.Set("cookie.JSESSIONID", val.Value)
 		}
 	}
-	viper.Set("cookie.expire", time.Now().AddDate(0, 0, 29).Unix())
+	viper.Set("cookie.expire", time.Now().AddDate(0, 0, 6).Unix())
 	if err != nil {
 		log.Fatal(err)
 	}

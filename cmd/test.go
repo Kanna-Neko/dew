@@ -99,6 +99,7 @@ func GetTestcases(problem string) testmanager.Testcases {
 	if testmanager.IsTestcaseExist(problem) {
 		return testmanager.ExtractTestcase(problem)
 	} else {
+		link.Login()
 		input, output := link.GetSample(contest, index)
 		var res testmanager.Testcases
 		for i := 0; i < len(input); i++ {
