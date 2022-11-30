@@ -18,6 +18,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(testCmd)
+	testCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "specify a codefile name which will be submit")
 }
 
 var testCmd = &cobra.Command{
@@ -26,6 +27,12 @@ var testCmd = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		ReadConfig()
+		if file == "" {
+			file = viper.GetString("codeFile." + viper.GetString("lang"))
+			if file == "" {
+				log.Fatal("please check codeFile field in ./codeforces/config.yaml")
+			}
+		}
 		var problem string
 		if len(args) == 1 {
 			if len(args[0]) == 1 {
@@ -53,14 +60,14 @@ var testCmd = &cobra.Command{
 		sp.Prefix = "testing "
 		sp.Start()
 		if lan.IsComplieLang {
-			compile := lan.CompileCode(viper.GetString("codefile." + language))
+			compile := lan.CompileCode(file)
 			compile.Stderr = os.Stderr
 			defer os.Remove("./cat")
 			compile.Run()
 		}
 		for _, v := range tests.Tests {
 			in := strings.NewReader(v.Input)
-			cmd := lan.RunCode(viper.GetString("codefile." + language))
+			cmd := lan.RunCode(file)
 			cmd.Stdin = in
 			cmd.Stderr = os.Stderr
 			out, err := cmd.Output()

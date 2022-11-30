@@ -10,8 +10,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var file string
+
 func init() {
 	rootCmd.AddCommand(submitCommand)
+	submitCommand.PersistentFlags().StringVarP(&file, "file", "f", "", "specify a codefile name which will be submit")
 }
 
 var submitCommand = &cobra.Command{
@@ -22,9 +25,11 @@ var submitCommand = &cobra.Command{
 		ReadConfig()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		file := viper.GetString("codeFile." + viper.GetString("lang"))
 		if file == "" {
-			log.Fatal("please check codeFile field in ./codeforces/config.yaml")
+			file = viper.GetString("codeFile." + viper.GetString("lang"))
+			if file == "" {
+				log.Fatal("please check codeFile field in ./codeforces/config.yaml")
+			}
 		}
 		var problem string
 		if len(args) == 1 {
