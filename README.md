@@ -35,6 +35,10 @@ dew submit
 dew problem 1749A
 dew test
 dew submit
+
+# specify a file
+dew test -f main.cpp
+dew submit -f main.cpp
 ```
 
 ## dew command
