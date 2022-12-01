@@ -23,10 +23,11 @@ var submitCommand = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		ReadConfig()
+		lang.ImportLangDic()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if file == "" {
-			file = viper.GetString("codeFile." + viper.GetString("lang"))
+			file = viper.GetString("language." + viper.GetString("lang") + ".codefile")
 			if file == "" {
 				log.Fatal("please check codeFile field in ./codeforces/config.yaml")
 			}

@@ -106,8 +106,13 @@ func ReadConfig() {
 
 func initLang() {
 	viper.Set("lang", "c++")
-	for k, v := range lang.LangDic {
-		viper.Set("codefile."+k, v.OriginalCodefile)
+	for _, v := range lang.LangSlice {
+		viper.Set("language."+v+".isCompileLang", lang.OriginLangDic[v].IsComplieLang)
+		viper.Set("language."+v+".compileCommand", lang.OriginLangDic[v].CompileCommand)
+		viper.Set("language."+v+".runCommand", lang.OriginLangDic[v].RunCommand)
+		viper.Set("language."+v+".programTypeId", lang.OriginLangDic[v].ProgramTypeId)
+		viper.Set("language."+v+".codefile", lang.OriginLangDic[v].Codefile)
+		viper.Set("language."+v+".Name", lang.OriginLangDic[v].Name)
 	}
 }
 
