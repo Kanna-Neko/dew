@@ -82,6 +82,8 @@ example:
 dew lang
 dew lang python3
 ```
+
+And you can custom lang in the ./codeforces/config.yaml
 ## dew template
 ### create your template
 1. mkdir in ./codeforces/template/{your template name}
