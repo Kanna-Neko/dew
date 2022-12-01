@@ -135,3 +135,62 @@ dew env -w proxy=http://127.0.0.1:41019
 ## Technology Stack
 1. [cobra](https://github.com/spf13/cobra)
 2. [resty](https://github.com/go-resty/resty)
+
+## programTypeId
+
+```
+<43>GNU GCC C11 5.1.0
+<80>Clang++20 Diagnostics
+<52>Clang++17 Diagnostics
+<50>GNU G++14 6.4.0
+<54>GNU G++17 7.3.0
+<73>GNU G++20 11.2.0 (64 bit, winlibs)
+<59>Microsoft Visual C++ 2017
+<61>GNU G++17 9.2.0 (64 bit, msys 2)
+<65>C# 8, .NET Core 3.1
+<79>C# 10, .NET SDK 6.0
+<9>C# Mono 6.8
+<28>D DMD32 v2.091.0
+<32>Go 1.19
+<12>Haskell GHC 8.10.1
+<60>Java 11.0.6
+<74>Java 17 64bit
+<36>Java 1.8.0_241
+<77>Kotlin 1.6.10
+<83>Kotlin 1.7.20
+<19>OCaml 4.02.1
+<3>Delphi 7
+<4>Free Pascal 3.0.2
+<51>PascalABC.NET 3.4.2
+<13>Perl 5.20.1
+<6>PHP 8.1.7
+<7>Python 2.7.18
+<31>Python 3.8.10
+<40>PyPy 2.7.13 (7.3.0)
+<41>PyPy 3.6.9 (7.3.0)
+<70>PyPy 3.9.10 (7.3.9, 64bit)
+<67>Ruby 3.0.0
+<75>Rust 1.65.0 (2021)
+<20>Scala 2.12.8
+<34>JavaScript V8 4.8.0
+<55>Node.js 12.16.3
+<14>ActiveTcl 8.5
+<15>Io-2008-01-07 (Win32)
+<17>Pike 7.8
+<18>Befunge
+<22>OpenCobol 1.0
+<25>Factor
+<26>Secret_171
+<27>Roco
+<33>Ada GNAT 4
+<38>Mysterious Language
+<39>FALSE
+<44>Picat 0.9
+<45>GNU C++11 5 ZIP
+<46>Java 8 ZIP
+<47>J
+<56>Microsoft Q#
+<57>Text
+<62>UnknownX
+<68>Secret 2021
+```
