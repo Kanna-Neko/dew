@@ -16,9 +16,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+var testAll bool
+
 func init() {
 	rootCmd.AddCommand(testCmd)
 	testCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "specify a codefile name which will be submit")
+	testCmd.Flags().BoolVarP(&testAll, "all", "a", false, "test all tests, default is test until the first wrong test")
 }
 
 var testCmd = &cobra.Command{
@@ -59,16 +62,17 @@ var testCmd = &cobra.Command{
 			log.Fatal("don't support language: " + language)
 		}
 		tests := GetTestcases(problem)
-		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
-		sp.Prefix = "testing "
-		sp.Start()
 		if lan.IsComplieLang {
 			compile := lan.CompileCode(file)
 			compile.Stderr = os.Stderr
 			defer os.Remove("./cat")
 			compile.Run()
 		}
-		for _, v := range tests.Tests {
+		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+		sp.Prefix = "testing "
+		sp.Start()
+		var isok = true
+		for index, v := range tests.Tests {
 			in := strings.NewReader(v.Input)
 			cmd := lan.RunCode(file)
 			cmd.Stdin = in
@@ -83,15 +87,20 @@ var testCmd = &cobra.Command{
 			v.Output = strings.Trim(v.Output, " \n")
 			if !bytes.Equal(out, []byte(v.Output)) {
 				sp.Stop()
-				fmt.Printf("oops!\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s", v.Input, string(out), v.Output)
-				return
+				fmt.Printf("oops! testcase %d wrong.\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s\n\n", index+1, v.Input, string(out), v.Output)
+				isok = false
+				if !testAll {
+					return
+				}
 			}
 		}
 		sp.Stop()
 		if len(tests.Tests) == 0 {
 			fmt.Println("Warning: sample is empty")
 		} else {
-			fmt.Println("OK")
+			if isok {
+				fmt.Println("OK")
+			}
 		}
 	},
 }
