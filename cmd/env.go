@@ -45,7 +45,6 @@ var env = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			// fmt.Printf("handle: %v\npassword: %v\nrating:%v\nproblem: %v\nrace: %v\nproxy: %v\ncodefile: %v\n", viper.Get("handle"), viper.Get("password"), viper.Get("rating"), viper.Get("problem"), viper.Get("race"), viper.Get("proxy"), viper.Get("codefile"))
 			for _, arg := range envSlice {
 				fmt.Printf("%s: %v\n", arg, viper.Get(arg))
 			}

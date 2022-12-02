@@ -23,30 +23,38 @@ var langCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			fmt.Printf("current lang: %s\n", viper.GetString("lang"))
-			fmt.Println("----------------------------")
-			fmt.Println("support program language:")
-			for k, lan := range lang.LangDic {
-				fmt.Println(k + ":")
-				fmt.Printf("   name: %s\n", lan.Name)
-				fmt.Printf("   codefile: %s\n", lan.Codefile)
-				fmt.Printf("   isCompileLang: %v\n", lan.IsComplieLang)
-				fmt.Printf("   compileCommand: %s\n", lan.CompileCode("$codefile").String())
-				fmt.Printf("   RunCommand: %s\n", lan.RunCode("$codefile").String())
-				fmt.Printf("   programTypeId: %s\n", lan.ProgramTypeId)
-			}
-			fmt.Println("----------------------------")
-			fmt.Printf("current lang: %s\n", viper.GetString("lang"))
+			displayLangDetails()
 		} else {
-			_, ok := lang.LangDic[args[0]]
-			if !ok {
-				log.Fatal("don't support language: " + args[0])
-			}
-			viper.Set("lang", args[0])
-			err := viper.WriteConfig()
-			if err != nil {
-				log.Fatal(err)
-			}
+			changeLang(args[0])
 		}
 	},
+}
+
+func displayLangDetails() {
+	fmt.Printf("current lang: %s\n", viper.GetString("lang"))
+	fmt.Println("----------------------------")
+	fmt.Println("support program language:")
+	for k, lan := range lang.LangDic {
+		fmt.Println(k + ":")
+		fmt.Printf("   name: %s\n", lan.Name)
+		fmt.Printf("   codefile: %s\n", lan.Codefile)
+		fmt.Printf("   isCompileLang: %v\n", lan.IsComplieLang)
+		fmt.Printf("   compileCommand: %s\n", lan.CompileCode("$codefile").String())
+		fmt.Printf("   RunCommand: %s\n", lan.RunCode("$codefile").String())
+		fmt.Printf("   programTypeId: %s\n", lan.ProgramTypeId)
+	}
+	fmt.Println("----------------------------")
+	fmt.Printf("current lang: %s\n", viper.GetString("lang"))
+}
+
+func changeLang(langShortcut string) {
+	_, ok := lang.LangDic[langShortcut]
+	if !ok {
+		log.Fatal("don't support language: " + langShortcut)
+	}
+	viper.Set("lang", langShortcut)
+	err := viper.WriteConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

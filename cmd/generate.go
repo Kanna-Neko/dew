@@ -189,7 +189,7 @@ var customCmd = &cobra.Command{
 	Use:   "custom",
 	Short: "custom a virtual contest",
 	Run: func(cmd *cobra.Command, args []string) {
-		test()
+		custom()
 	},
 }
 
@@ -289,7 +289,7 @@ func (m model) View() string {
 	return "\n" + m.list.View()
 }
 
-func test() {
+func custom() {
 	data, err := ioutil.ReadFile("./codeforces/contestTemplate.json")
 	if err != nil {
 		log.Fatal(err)

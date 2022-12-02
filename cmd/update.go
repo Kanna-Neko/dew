@@ -28,13 +28,15 @@ func init() {
 var UpdateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "update problem data",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		ReadConfig()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		updateFunc()
 	},
 }
 
 func updateFunc() {
-	ReadConfig()
 	cj := uispinner.New()
 	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("problem data updating").SetComplete("problem data update complete")
 	cj.Start()
