@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -88,6 +89,7 @@ func configFunc() {
 	fmt.Println("handle and password save into ./codeforces/config.yaml")
 	initTmplate()
 	initTestManager()
+	initContestTemplate()
 	cj := uispinner.New()
 	defer cj.Stop()
 	no1 := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("user rating is initing").SetComplete("user rating init complete")
@@ -128,6 +130,25 @@ func initTmplate() {
 }
 func initTestManager() {
 	err := os.MkdirAll(testFilesDir, 0777)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initContestTemplate() {
+	var template = ContestInfos{
+		Templates: []ContestInfo{{
+			Name:              "example",
+			Duration:          "120",
+			ContestTitle:      "Do you like cat?",
+			ProblemConditions: div2Diffculty,
+		}},
+	}
+	data, err := json.MarshalIndent(template,"","  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile("./codeforces/contestTemplate.json", data, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}

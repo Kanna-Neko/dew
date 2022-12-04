@@ -22,9 +22,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-var div3Diffculty = [][]string{{"800"}, {"800", "900"}, {"900", "1000", "1100"}, {"1100", "1200", "1300", "1400"}, {"1400", "1500", "1600", "1700"}, {"1700", "1800", "1900"}, {"1900", "2000", "2100"}}
-var div2Diffculty = [][]string{{"800", "900", "1000"}, {"1000", "1100", "1200"}, {"1200", "1300", "1400", "1500", "1600"}, {"1600", "1700", "1800", "1900"}, {"2000", "2100", "2200", "2300", "2400"}, {"2500", "2600", "2700", "2800"}}
-var div1Diffculty = [][]string{{"1500", "1600", "1700"}, {"1800", "1900", "2000", "2100", "2200", "2300"}, {"2400", "2500", "2700", "2800"}, {"2900", "3000", "3100", "3200", "3300", "3400", "3500"}, {"3400", "3500"}}
+var div3Diffculty = []ProblemCondition{{Difficult: []string{"800"}}, {Difficult: []string{"800", "900"}}, {Difficult: []string{"900", "1000", "1100"}}, {Difficult: []string{"1100", "1200", "1300", "1400"}}, {Difficult: []string{"1400", "1500", "1600", "1700"}}, {Difficult: []string{"1700", "1800", "1900"}}, {Difficult: []string{"1900", "2000", "2100"}}}
+var div2Diffculty = []ProblemCondition{{Difficult: []string{"800", "900", "1000"},Bad: []string{"interactive"}}, {Difficult: []string{"1000", "1100", "1200"},Bad: []string{"interactive"}}, {Difficult: []string{"1200", "1300", "1400", "1500", "1600"}}, {Difficult: []string{"1600", "1700", "1800", "1900"}}, {Difficult: []string{"2000", "2100", "2200", "2300", "2400"}}, {Difficult: []string{"2500", "2600", "2700", "2800"}}}
+var div1Diffculty = []ProblemCondition{{Difficult: []string{"1500", "1600", "1700"}}, {Difficult: []string{"1800", "1900", "2000", "2100", "2200", "2300"}}, {Difficult: []string{"2400", "2500", "2600", "2700", "2800"}}, {Difficult: []string{"2900", "3000", "3100", "3200", "3300"}}, {Difficult: []string{"3400", "3500"}}}
 
 func init() {
 	rootCmd.AddCommand(NewCmd)
@@ -51,37 +51,49 @@ var div3 = &cobra.Command{
 	Use:   "div3",
 	Short: "create a contest, whose difficulty like div3",
 	Run: func(cmd *cobra.Command, args []string) {
-		newContest(div3Diffculty, title, duration)
+		newContest(ContestInfo{
+			Duration:          "120",
+			ContestTitle:      "miaonei",
+			ProblemConditions: div3Diffculty,
+		})
 	},
 }
 var div2 = &cobra.Command{
 	Use:   "div2",
 	Short: "create a contest, whose difficulty like div2",
 	Run: func(cmd *cobra.Command, args []string) {
-		newContest(div2Diffculty, title, duration)
+		newContest(ContestInfo{
+			Duration:          "120",
+			ContestTitle:      "miaonei",
+			ProblemConditions: div2Diffculty,
+		})
 	},
 }
 var div1 = &cobra.Command{
 	Use:   "div1",
 	Short: "create a contest, whose difficulty like div1",
 	Run: func(cmd *cobra.Command, args []string) {
-		newContest(div1Diffculty, title, duration)
+		newContest(ContestInfo{
+			Duration:          "120",
+			ContestTitle:      "miaonei",
+			ProblemConditions: div1Diffculty,
+		})
 	},
 }
 
-func newContest(diffculty [][]string, contestTitle string, contestDuration string) {
-	if contestTitle == "" {
-		contestTitle = title
+func newContest(contest ContestInfo) {
+	if contest.ContestTitle == "" {
+		contest.ContestTitle = title
 	}
-	if contestDuration == "" {
-		contestDuration = "120"
+	if contest.Duration == "" {
+		contest.Duration = "120"
 	}
-	if len(diffculty) == 0 {
-		diffculty = div2Diffculty
+	if len(contest.ProblemConditions) == 0 {
+		contest.ProblemConditions = div2Diffculty
 	}
 	link.Login()
-	pro := PickSomeProblem(diffculty)
-	link.CreateContest(contestTitle, contestDuration, pro)
+	pro := PickSomeProblem(contest.ProblemConditions)
+	link.CreateContest(contest.ContestTitle, contest.Duration, pro)
 	OpenWebsite(codeforcesDomain + "/mashups")
 }
 
@@ -119,7 +131,9 @@ func Random() {
 	for i := lowRating; i <= highRating; i += 100 {
 		pro = append(pro, strconv.Itoa(i))
 	}
-	var thisOne = PickOneProblem(pro)
+	var thisOne = PickOneProblem(ProblemCondition{
+		Difficult: pro,
+	})
 	viper.Set("problem", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
 	err := viper.WriteConfig()
 	if err != nil {
@@ -129,7 +143,7 @@ func Random() {
 	GetTestcases(strconv.Itoa(thisOne.ContestId) + thisOne.Index)
 }
 
-func PickSomeProblem(in [][]string) []string {
+func PickSomeProblem(in []ProblemCondition) []string {
 	cj := uispinner.New()
 	cj.Start()
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("picking problems").SetComplete("pick problem complete")
@@ -150,9 +164,11 @@ func PickSomeProblem(in [][]string) []string {
 	return pro
 }
 
-func PickOneProblem(r []string) problemInfo {
-	data := PickProblems(r)
+func PickOneProblem(r ProblemCondition) problemInfo {
+	data := PickProblems(r.Difficult)
 	data = Deduplication(data, link.GetStatus())
+	data = filterGood(data, r.Good)
+	data = filterBad(data, r.Bad)
 	if len(data) == 0 {
 		log.Fatal("you are so good, you have solve all problems of the range", r)
 	}
@@ -185,6 +201,46 @@ func Deduplication(data []problemInfo, s map[string]bool) []problemInfo {
 	return res
 }
 
+func filterGood(data []problemInfo, good []string) []problemInfo {
+	if len(good) == 0 {
+		return data
+	}
+	var mp = make(map[string]bool)
+	for _, v := range good {
+		mp[v] = true
+	}
+	var result []problemInfo
+	for _, v := range data {
+		for _, vv := range v.Tags {
+			if mp[vv] {
+				result = append(result, v)
+				break
+			}
+		}
+	}
+	return result
+}
+func filterBad(data []problemInfo, bad []string) []problemInfo {
+	if len(bad) == 0 {
+		return data
+	}
+	var mp = make(map[string]bool)
+	for _, v := range bad {
+		mp[v] = true
+	}
+	var result []problemInfo
+	for _, v := range data {
+		for _, vv := range v.Tags {
+			if mp[vv] {
+				break
+			}
+		}
+		result = append(result, v)
+	}
+	return result
+
+}
+
 var customCmd = &cobra.Command{
 	Use:   "custom",
 	Short: "custom a virtual contest",
@@ -194,10 +250,15 @@ var customCmd = &cobra.Command{
 }
 
 type ContestInfo struct {
-	Duration     string     `json:"duration"`
-	ContestTitle string     `json:"contestTitle"`
-	Name         string     `json:"name"`
-	Difficult    [][]string `json:"difficult"`
+	Duration          string             `json:"duration"`
+	ContestTitle      string             `json:"contestTitle"`
+	Name              string             `json:"name"`
+	ProblemConditions []ProblemCondition `json:"problemConditions"`
+}
+type ProblemCondition struct {
+	Difficult []string `json:"difficult"`
+	Good      []string `json:"good"`
+	Bad       []string `json:"bad"`
 }
 type ContestInfos struct {
 	Templates []ContestInfo `json:"templates"`
@@ -284,7 +345,7 @@ func (m model) View() string {
 		return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to you.", m.choice.Name))
 	}
 	if m.quitting {
-		return quitTextStyle.Render("No want? That’s cool.")
+		return quitTextStyle.Render("No want? That's cool.")
 	}
 	return "\n" + m.list.View()
 }
@@ -320,6 +381,10 @@ func custom() {
 		os.Exit(1)
 	}
 	if m, ok := mod.(model); ok && m.choice.Name != "" {
-		newContest(m.choice.Difficult, m.choice.ContestTitle, m.choice.Duration)
+		newContest(ContestInfo{
+			Duration:          m.choice.Duration,
+			ContestTitle:      m.choice.ContestTitle,
+			ProblemConditions: m.choice.ProblemConditions,
+		})
 	}
 }
