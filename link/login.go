@@ -29,6 +29,7 @@ var (
 	handle    string
 	password  string
 	cookieJar *cookiejar.Jar
+	logined   bool = false
 )
 
 func init() {
@@ -56,20 +57,21 @@ func Login() {
 	setProxy()
 	if checkLoginAgain() {
 		loginAgain()
+		logined = true
 	} else {
 		reloadCookie()
 	}
 }
 
 func checkLoginAgain() bool {
-	t := viper.GetInt64("cookie.expire")
-	if time.Now().Unix() > t {
-		return true
+	if logined {
+		return false
 	}
 	if !viper.IsSet("cookie.csrf") || !viper.IsSet("cookie.JSESSIONID") || !viper.IsSet("cookie.39ce7") || !viper.IsSet("cookie.rcpc") {
 		return true
 	}
-	return false
+	t := viper.GetInt64("cookie.expire")
+	return time.Now().Unix() > t
 }
 
 func loginAgain() {

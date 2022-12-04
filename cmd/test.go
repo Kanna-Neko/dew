@@ -106,10 +106,6 @@ var testCmd = &cobra.Command{
 }
 
 func GetTestcases(problem string) testmanager.Testcases {
-	sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
-	sp.Prefix = "geting TestCases "
-	sp.Start()
-	defer sp.Stop()
 	contest, index := splitProblem(problem)
 	var manager = testmanager.ExtractManager()
 	manager = testmanager.ManagerPush(manager, problem)
@@ -119,6 +115,10 @@ func GetTestcases(problem string) testmanager.Testcases {
 		return testmanager.ExtractTestcase(problem)
 	} else {
 		link.Login()
+		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+		sp.Prefix = "geting TestCases "
+		sp.Start()
+		defer sp.Stop()
 		input, output := link.GetSample(contest, index)
 		var res testmanager.Testcases
 		for i := 0; i < len(input); i++ {
