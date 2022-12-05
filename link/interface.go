@@ -10,7 +10,17 @@ type ContestStandingInterface struct {
 	Comment string                `json:"comment"`
 }
 type ContestStandingResult struct {
-	Problems []Problem `json:"problems"`
+	Problems []Problem   `json:"problems"`
+	Contest  ContestInfo `json:"contest"`
+}
+type ContestInfo struct {
+	Id                  int    `json:"id"`
+	Name                string `json:"name"`
+	Phase               string `json:"phase"`
+	Frozen              bool   `json:"frozen"`
+	DurationSeconds     int    `json:"durationSeconds"`
+	StartTimeSeconds    int    `json:"startTimeSeconds"`
+	RelativeTimeSeconds int    `json:"relativeTimeSeconds"`
 }
 type Status struct {
 	Problem Problem `json:"problem"`

@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -25,14 +27,27 @@ var raceCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		link.Login()
 		sp := spinner.New(spinner.CharSets[34], 100*time.Millisecond)
-		sp.FinalMSG = "get contest info completed"
+		sp.FinalMSG = "get contest info completed\n"
 		sp.Prefix = "geting contest info "
 		sp.Start()
-		problems := link.GetContestProblems(args[0])
+		t := link.GetContestCountdown(args[0])
+		for t > 0 {
+			sp.Prefix = fmt.Sprintf("countdown: %d ", t)
+			time.Sleep(time.Second)
+			t--
+		}
+		sp.Prefix = "geting testcases "
+		info := link.GetContestInfo(args[0])
 		sp.Stop()
+		var problems []string
+		for _, v := range info.Problems {
+			problems = append(problems, strconv.Itoa(v.ContestId)+v.Index)
+		}
 		for _, v := range problems {
 			GetTestcases(v)
 		}
+		fmt.Println("testcases download complete")
 	},
 }

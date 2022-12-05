@@ -1,13 +1,17 @@
 package link
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/briandowns/spinner"
 	"github.com/jaxleof/uispinner"
 )
@@ -110,7 +114,7 @@ func CreateContest(title string, duration string, problems []string) {
 	cj.Stop()
 }
 
-func GetContestProblems(contestId string) []string {
+func GetContestInfo(contestId string) ContestStandingResult {
 	var res ContestStandingInterface
 	response, err := me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=jaxleof&showUnofficial=true")
 	if err != nil {
@@ -120,9 +124,39 @@ func GetContestProblems(contestId string) []string {
 	if res.Status != "OK" {
 		log.Fatal(res.Comment)
 	}
-	var problems []string
-	for _, v := range res.Result.Problems {
-		problems = append(problems, strconv.Itoa(v.ContestId)+v.Index)
+	return res.Result
+}
+
+func GetContestCountdown(contestId string) int {
+
+	res, err := me.R().Get(fmt.Sprintf("https://codeforces.com/contest/%s/countdown", contestId))
+	if err != nil {
+		log.Fatal(err)
 	}
-	return problems
+	var ioo = bytes.NewReader(res.Body())
+	doc, err := goquery.NewDocumentFromReader(ioo)
+	if err != nil {
+		log.Fatal(err)
+	}
+	val, exist := doc.Find(".countdown>span").First().Attr("title")
+	if !exist {
+		val = doc.Find(".countdown").First().Text()
+		if val == "" {
+			return 0
+		}
+	}
+	var slice = strings.Split(val, ":")
+	s, err := strconv.Atoi(slice[2])
+	if err != nil {
+		log.Fatal(err)
+	}
+	m, err := strconv.Atoi(slice[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	h, err := strconv.Atoi(slice[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+	return s + m*60 + h*60*60
 }
