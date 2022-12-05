@@ -132,6 +132,10 @@ dew random 1000 1200
 dew env -w proxy=http://127.0.0.1:41019
 # replace http://127.0.0.1:41019 with your proxy server
 ```
+
+## Development Plan
+[link](https://miaonei.notion.site/45b6802260cb479896640a06d521c99e?v=83fa5f001404427fa645aa5009ada702)
+
 ## Technology Stack
 1. [cobra](https://github.com/spf13/cobra)
 2. [resty](https://github.com/go-resty/resty)
