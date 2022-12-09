@@ -158,6 +158,9 @@ dew template hello
 dew template basic gcd
 ```
 
+## gym support
+Use dew init apikey command first, you can obtain apikey in the https://codeforces.com/settings/api
+
 ## dew random
 random command will specify a problem for your current rating \[+200, +300\], and you can specify a detailed rating or range rating you want.
 
