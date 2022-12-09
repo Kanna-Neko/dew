@@ -60,6 +60,10 @@ var submitCommand = &cobra.Command{
 			log.Fatal("don't support language: " + language)
 		}
 		link.SubmitCode(contest, index, code, lan.ProgramTypeId)
-		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/my")
+		if isGym(contest) {
+			OpenWebsite(codeforcesDomain + "/gym/" + contest + "/my")
+		}else {
+			OpenWebsite(codeforcesDomain + "/contest/" + contest + "/my")
+		}
 	},
 }

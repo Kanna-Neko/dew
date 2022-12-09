@@ -33,9 +33,18 @@ var standCmd = &cobra.Command{
 			log.Fatal("please use race command to specify a contest first")
 		}
 		if standAll {
-			OpenWebsite(fmt.Sprintf("https://codeforces.com/contest/%s/standings", contest))
-		}else {
-			OpenWebsite(fmt.Sprintf("https://codeforces.com/contest/%s/standings/friends/true", contest))
+			if isGym(contest) {
+				OpenWebsite(fmt.Sprintf("https://codeforces.com/gym/%s/standings", contest))
+
+			} else {
+				OpenWebsite(fmt.Sprintf("https://codeforces.com/contest/%s/standings", contest))
+			}
+		} else {
+			if isGym(contest) {
+				OpenWebsite(fmt.Sprintf("https://codeforces.com/gym/%s/standings/friends/true", contest))
+			} else {
+				OpenWebsite(fmt.Sprintf("https://codeforces.com/contest/%s/standings/friends/true", contest))
+			}
 		}
 	},
 }

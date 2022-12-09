@@ -41,7 +41,11 @@ var problemCmd = &cobra.Command{
 			}
 		}
 		contest, index := splitProblem(problemInfo)
-		OpenWebsite(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+		if isGym(contest) {
+			OpenWebsite(codeforcesDomain + "/gym/" + contest + "/problem/" + index)
+		} else {
+			OpenWebsite(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+		}
 		GetTestcases(problemInfo)
 	},
 }

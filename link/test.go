@@ -5,11 +5,18 @@ import (
 	"log"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/go-resty/resty/v2"
 )
 
 func GetSample(contest string, index string) ([]string, []string) {
 	setProxy()
-	res, err := me.R().SetDoNotParseResponse(true).Get(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+	var res *resty.Response
+	var err error
+	if !isGym(contest) {
+		res, err = me.R().SetDoNotParseResponse(true).Get(codeforcesDomain + "/contest/" + contest + "/problem/" + index)
+	} else {
+		res, err = me.R().SetDoNotParseResponse(true).Get(codeforcesDomain + "/gym/" + contest + "/problem/" + index)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,4 +50,8 @@ func GetSample(contest string, index string) ([]string, []string) {
 		output = append(output, dom.Find("pre").Text())
 	})
 	return input, output
+}
+
+func isGym(contest string) bool {
+	return len(contest) >= 6
 }

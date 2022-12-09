@@ -24,7 +24,7 @@ var envSet = map[string]bool{
 	"proxy":    true,
 	"lang":     true,
 }
-var envSlice = []string{"handle", "password", "rating", "problem", "race", "proxy"}
+var envSlice = []string{"handle", "password", "rating", "problem", "race", "proxy", "apikey", "secret"}
 
 func init() {
 	env.PersistentFlags().BoolVarP(&modify, "write", "w", false, `you can modify env like "env -w proxy=http://127.0.0.1:20245" when you use flag -w or --write`)

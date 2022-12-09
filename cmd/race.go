@@ -51,3 +51,7 @@ var raceCmd = &cobra.Command{
 		fmt.Println("testcases download complete")
 	},
 }
+
+func isGym(contest string) bool {
+	return len(contest) >= 6
+}

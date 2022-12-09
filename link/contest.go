@@ -2,6 +2,8 @@ package link
 
 import (
 	"bytes"
+	"crypto/sha512"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,7 +15,9 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/briandowns/spinner"
+	"github.com/go-resty/resty/v2"
 	"github.com/jaxleof/uispinner"
+	"github.com/spf13/viper"
 )
 
 func CloneContest(title string, id string, duration string) {
@@ -116,7 +120,23 @@ func CreateContest(title string, duration string, problems []string) {
 
 func GetContestInfo(contestId string) ContestStandingResult {
 	var res ContestStandingInterface
-	response, err := me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=jaxleof&showUnofficial=true")
+	var response *resty.Response
+	var err error
+	if isGym(contestId) {
+		apikey := viper.GetString("apikey")
+		secret := viper.GetString("secret")
+		if apikey == "" || secret == "" {
+			log.Fatal("please use init apikey command first")
+		}
+		tim := time.Now().Unix()
+		url := "contest.standings?apiKey=%s&contestId=%s&count=5&from=1&showUnofficial=true&time=%d"
+		data := "987654/" + fmt.Sprintf(url, apikey,contestId, tim) + "#" + secret
+		hash := sha512.Sum512([]byte(data))
+		path := "https://codeforces.com/api/" + fmt.Sprintf(url, apikey,contestId, tim) + "&apiSig=987654" + hex.EncodeToString(hash[:])
+		response, err = me.R().Get(path)
+	} else {
+		response, err = me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=jaxleof&showUnofficial=true")
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -129,7 +149,13 @@ func GetContestInfo(contestId string) ContestStandingResult {
 
 func GetContestCountdown(contestId string) int {
 
-	res, err := me.R().Get(fmt.Sprintf("https://codeforces.com/contest/%s/countdown", contestId))
+	var res *resty.Response
+	var err error
+	if isGym(contestId) {
+		res, err = me.R().Get(fmt.Sprintf("https://codeforces.com/gym/%s/countdown", contestId))
+	} else {
+		res, err = me.R().Get(fmt.Sprintf("https://codeforces.com/contest/%s/countdown", contestId))
+	}
 	if err != nil {
 		log.Fatal(err)
 	}

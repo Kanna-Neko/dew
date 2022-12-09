@@ -16,6 +16,12 @@ func SubmitCode(contest string, index string, code []byte, programTypeId string)
 	sp.Prefix = "AC!!! "
 	sp.Start()
 	sp.FinalMSG = "submission complete\n"
+	var path string
+	if isGym(contest) {
+		path = fmt.Sprintf(codeforcesDomain+"/gym/%s/submit?csrf_token=%s", contest, csrf)
+	} else {
+		path = fmt.Sprintf(codeforcesDomain+"/contest/%s/submit?csrf_token=%s", contest, csrf)
+	}
 	res, err := me.R().SetFormData(map[string]string{
 		"csrf_token":            csrf,
 		"action":                "submitSolutionFormSubmitted",
@@ -24,7 +30,7 @@ func SubmitCode(contest string, index string, code []byte, programTypeId string)
 		"programTypeId":         programTypeId,
 		"source":                string(code),
 		"tabSize":               "4",
-	}).Post(fmt.Sprintf(codeforcesDomain+"/contest/%s/submit?csrf_token=%s", contest, csrf))
+	}).Post(path)
 	if err != nil {
 		log.Fatal(err)
 	}

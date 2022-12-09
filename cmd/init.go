@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -58,6 +59,7 @@ const testFilesDir = "./codeforces/testFiles/"
 
 func init() {
 	rootCmd.AddCommand(InitCmd)
+	InitCmd.AddCommand(InitApikeyCmd)
 }
 
 var InitCmd = &cobra.Command{
@@ -66,6 +68,29 @@ var InitCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		configFunc()
 		updateFunc()
+	},
+}
+var InitApikeyCmd = &cobra.Command{
+	Use:   "apikey",
+	Short: "init apikey and secret",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		ReadConfig()
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("please type the apikey")
+		var apikey string
+		fmt.Scanf("%s", &apikey)
+		fmt.Println("please type secret")
+		var secret string
+		fmt.Scanf("%s", &secret)
+		apikey = strings.Trim(apikey, " ")
+		secret = strings.Trim(secret, " ")
+		viper.Set("apikey", apikey)
+		viper.Set("secret", secret)
+		err := viper.WriteConfig()
+		if err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
@@ -144,7 +169,7 @@ func initContestTemplate() {
 			ProblemConditions: div2Diffculty,
 		}},
 	}
-	data, err := json.MarshalIndent(template,"","  ")
+	data, err := json.MarshalIndent(template, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
