@@ -29,7 +29,7 @@ I introduce two solution for you
 |Support gym|not only contest, and gym|
 |Template generator|you can store your template and generate it|
 |Randomly pick problem for you|you can randomly pick one problem in codeforces, you can use it like a tool, everyday one problem|
-|contest generator|you can generate a contest in mushups, if you need it for your team practice|
+|contest generator|you can generate a contest in mushups, if you need it for your team practice, the source of problems come from codeforces.|
 
 ## Some snapshot
 ![](./snapshot/1.png)
@@ -114,15 +114,16 @@ dew lang python3
 ```
 
 ### how to config the language
-1. let's see the config file, the location of it is "./codeforces/config.yaml",there is python3 configuration
+1. Ensure you add your language command into path.
+1. Let's see the config file, the location of it is "./codeforces/config.yaml",there is python3 configuration below.
 ```
-python3: ## the shortcut, you can change to python3 when you use command "dew lang 
+python3: ## the shortcut, you can change to python3 when you use command "dew lang shortcut.
    name: Python 3.8.10 #the name, It's a hint
    codefile: dew.py ## the file dew will test and submit
    isCompileLang: false 
    compileCommand:
    RunCommand: python3 $codefile ##dew will run this command when test, $codefile is a variable, the dew will automatically replace it.
-   programTypeId: 31 #choose language when dew submit it to codeforces, you can query programTypeId dictionary at the bottom of this document.
+   programTypeId: 31 ## choose language when dew submit it to codeforces, you can query programTypeId dictionary at the bottom of this document.
 ```
 
 ## dew template
@@ -169,7 +170,7 @@ dew random 1000 1200
 
 ## dew generate
 1. this command can generate a contest on mushups, I built three option in it for you, you can use `dew generate div1` `dew generate div2` `dew generate div3` to generate.
-2. If you hope custom difficult and filter some tag, you can use dew `generate custom` command, you can config it in "./codeforces/contestTemplate.json", dew will filter all problem satisfy thoes difficult, tag you choose in *good* field and without *bad* field.
+2. If you hope custom difficult and filter some tag, you can use `dew generate custom` command, you can config it in "./codeforces/contestTemplate.json", dew will filter all problem satisfy thoes difficult, tag you choose in **good** field and without **bad** field
 
 ## proxy set
 ```shell

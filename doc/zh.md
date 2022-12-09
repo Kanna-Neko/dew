@@ -8,8 +8,36 @@
 
 ## 哪些人需要dew
 1. 认为重复进行测试并且点击提交是件很麻烦的事情
-2. You need more frequent practice, and you want to create more contest for you or your team.
+2. 你需要为你或你的团队创建更多的训练
+
 ## 安装
+我将介绍两种方式给你
+
+### 下载二进制程序并将他添加在path中
+  1. 打开 [releases](https://github.com/jaxleof/dew/releases)
+  2. 下载压缩包
+  3. 解压并将他加入到path中，如果你不知道什么是path，你可以尝试百度一下，或者询问你的学长学姐。
+
+### 或者使用go install 命令
+  1. 下载golang(https://golang.google.cn/)
+  2. 使用命令 `go install github.com/jaxleof/dew@latest`
+
+## 特性
+|name|describe|
+|---|---|
+|跨平台|支持windows,macos,linux|
+|多种语言e|理论上支持所有语言|
+|快速提交以及测试|使用命令行，你只需要敲击几个单词，你就可以测试你的代码并进行提交|
+|支持gym|不止是正式比赛，并且支持mushups和gym|
+|模板生成|你可以存储你的模板并且在你需要他们的时候进行生成|
+|为你随机选择题目|you can randomly pick one problem in codeforces, you can use it like a tool, everyday one problem你可以在codeforces中随机选择一道题目，你可以把它当作每日一题|
+|比赛生成器|你可以为你自己或你的团队生成一场比赛在mushups中，其中的题目来源codeforces|
+
+## Some snapshot
+![](./snapshot/1.png)
+![](./snapshot/2.png)
+![](./snapshot/3.png)
+![](./snapshot/4.png)
 
 
 ## 基础使用
@@ -68,6 +96,7 @@ Available Commands:
   submit      提交代码
   template    生产模板
   test        测试代码
+  version     查看版本
   tutorial    在luogu中打开题解
   update      更新题目数据到本地
 
@@ -87,6 +116,19 @@ example:
 dew lang
 dew lang python3
 ```
+### 如何自定义语言
+
+1. 确保你的语言程序被你安装进环境变量里了
+2. 让我们来看看配置文件，它的位置在 "./codeoforces.config.yaml" ,以下是python3的配置信息
+```
+python3: ## the shortcut, you can change to python3 when you use command "dew lang ，这是shortcut，你可以通过dew lang shortcut来改变你使用的语言
+   name: Python 3.8.10 #语言名
+   codefile: dew.py ## the file dew will test and submit
+   isCompileLang: false 
+   compileCommand:
+   RunCommand: python3 $codefile ##dew将会在test命令中运行这个命令，$codefile是一个变量，dew将会在运行时自动替换掉他
+   programTypeId: 31 ## 当你使用提交命令的使用，programTypeId决定了dew使用哪种语言提交，你可以在最下方查看所有的语言
+```
 ## dew template
 ### 创建你自己的模板
 1. 创建一个文件夹在 ./codeforces/template/{你的模板的名字}
@@ -94,7 +136,7 @@ dew lang python3
 3. 如果你想显示当前有多少模板可以选择，你可以使用`dew template -a`命令
 
 ### 生成模板
-The program will create all template file in your template dir when you use template command, for instance `dew template hello`, all file in `./codeforces/hello/` will be created in current path.
+
 程序将生成所有存在于模板文件夹中的文件，例如当你使用`dew template hello`，所有在`./codeforces/hello/`中的文件将会被创建在当前文件夹。
 
 如果你没有添加任何模板名，那么相当于你使用了`dew template default`
@@ -130,6 +172,13 @@ dew random 1800
 dew random 1000 1200
 ```
 
+## dew generate
+1. this command can generate a contest on mushups, I built three option in it for you, you can use `dew generate div1` `dew generate div2` `dew generate div3` to generate.
+这个命令将会生成一个比赛在mushups中，我内置了三个选项在这个命令中， 你可以使用`dew generate div1` `dew generate div2` `dew generate div3` 来生成比赛。
+2. If you hope custom difficult and filter some tag, you can use `dew generate custom` command, you can config it in "./codeforces/contestTemplate.json", dew will filter all problem satisfy thoes difficult, tag you choose in **good** field and without **bad** field
+如果你想自定义难度并且筛选一些标签，你可以使用`dew generate custom` 命令， 你可以配置一些选项在"./codeforces/contestTemplate.json",dew 将会筛选出你所选择的难度并且所有tag满足good中的标签，并且不包含bad中的标签。
+## 开发计划
+[link](https://miaonei.notion.site/45b6802260cb479896640a06d521c99e?v=83fa5f001404427fa645aa5009ada702)
 ## 代理设置
 ```shell
 # 在初始化之后
