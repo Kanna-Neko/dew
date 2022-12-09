@@ -66,6 +66,7 @@ var testCmd = &cobra.Command{
 			compile := lan.CompileCode(file)
 			compile.Stderr = os.Stderr
 			defer os.Remove("./cat")
+			defer os.Remove("./cat.exe")
 			compile.Run()
 		}
 		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)

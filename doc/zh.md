@@ -2,9 +2,15 @@
 
 语言： [en](../README.md)/zh
 
-dew是一个可以帮助你测试并提交代码到codeforces的软件，并且它还可以随机生成比赛或题目帮助你更好的进行训练。
+很高兴可以向你介绍dew，dew是一个可以帮助你测试并提交代码到codeforces的软件，并且它还可以随机生成比赛或题目帮助你更好的进行训练。
 
 我推荐你使用`dew random` 命令， 它可以随机从题库中挑选一道符合你水平的题目，这道题目的分数是你的评分[+200,+300]
+
+## 哪些人需要dew
+1. 认为重复进行测试并且点击提交是件很麻烦的事情
+2. You need more frequent practice, and you want to create more contest for you or your team.
+## 安装
+
 
 ## 基础使用
 ```shell

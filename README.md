@@ -2,11 +2,41 @@
 
 language: en/[zh](./doc/zh.md)
 
-dew is a assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random.
+I'm glad to introduce dew command application for you. dew is a assistant which can help you test your program you will submit on codeforces. and a contest generator base on codeforces, which will help you better practice. you can use generate command a contest on mashup, whose problems is random.
 
-I suggest you use 'dew random' command, which will generate one problem whose difficulty base your rating [+200, +300] 
+## who need dew
+1. Think test pre testcases is a troubleThink it's a hassle to repeat test cases and commits over and over.
+2. You need more frequent practice, and you want to create more contest for you or your team.
 
-## basic Usage
+## Install
+I introduce two solution for you
+
+### Download binary application and add into path
+  1. open [releases](https://github.com/jaxleof/dew/releases)
+  2. download zip
+  3. decompress and move into path dir(if you don't know how to do it, the tutorial is for you: [tutorial](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho))
+
+### Or use go install command
+  1. prerequisite: download golang(https://golang.google.cn/)
+  2. use command `go install github.com/jaxleof/dew@latest`
+
+## Feature
+|name|describe|
+|---|---|
+|Cross platform|support windows, macos, linux and so on|
+|multiple language|In theory all languages support|
+|Quickly test and submit your program|use cli, you only need type some words, you can submit your program to codeforces|
+|Support gym|not only contest, and gym|
+|Template generator|you can store your template and generate it|
+|Randomly pick problem for you|you can randomly pick one problem in codeforces, you can use it like a tool, everyday one problem|
+|contest generator|you can generate a contest in mushups, if you need it for your team practice|
+
+## Some snapshot
+![](./snapshot/1.png)
+![](./snapshot/2.png)
+![](./snapshot/3.png)
+![](./snapshot/4.png)
+## Basic Usage
 ```shell
 # relax yourself and enjoy it, it's easy.
 dew init
@@ -16,7 +46,7 @@ dew init
 # write your program, we promise use dew.cpp as original submit code file.
 # you can rewrite codefile in ./codeforces/config.yaml for different language
 # codefile is code program will test and submit
-vim dew.cpp
+vim dew.cpp # code your solution
 dew test 1749A
 dew submit 1749A
 
@@ -54,7 +84,7 @@ Available Commands:
   help        Help about any command
   init        init somethings
   lang        switch program language
-  login       manually login #maybe you will use when token is expired
+  login       manually login
   open        a shortcut of opening codeforces website
   problem     open problem in codeforces
   race        set contest env
@@ -75,7 +105,7 @@ Use "dew [command] --help" for more information about a command.
 ## dew lang
 This command will show current and total choice you can choose when nothing after command
 
-If you want to change language, you can use dew lang {language shortcut}
+If you want to change language, you can use dew lang \<language shortcut\>
 
 example:
 ```shell
@@ -83,7 +113,18 @@ dew lang
 dew lang python3
 ```
 
-And you can custom lang in the ./codeforces/config.yaml
+### how to config the language
+1. let's see the config file, the location of it is "./codeforces/config.yaml",there is python3 configuration
+```
+python3: ## the shortcut, you can change to python3 when you use command "dew lang 
+   name: Python 3.8.10 #the name, It's a hint
+   codefile: dew.py ## the file dew will test and submit
+   isCompileLang: false 
+   compileCommand:
+   RunCommand: python3 $codefile ##dew will run this command when test, $codefile is a variable, the dew will automatically replace it.
+   programTypeId: 31 #choose language when dew submit it to codeforces, you can query programTypeId dictionary at the bottom of this document.
+```
+
 ## dew template
 ### create your template
 1. mkdir in ./codeforces/template/{your template name}
@@ -125,6 +166,10 @@ dew random
 dew random 1800
 dew random 1000 1200
 ```
+
+## dew generate
+1. this command can generate a contest on mushups, I built three option in it for you, you can use `dew generate div1` `dew generate div2` `dew generate div3` to generate.
+2. If you hope custom difficult and filter some tag, you can use dew `generate custom` command, you can config it in "./codeforces/contestTemplate.json", dew will filter all problem satisfy thoes difficult, tag you choose in *good* field and without *bad* field.
 
 ## proxy set
 ```shell
