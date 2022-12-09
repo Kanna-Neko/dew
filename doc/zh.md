@@ -34,10 +34,10 @@
 |比赛生成器|你可以为你自己或你的团队生成一场比赛在mushups中，其中的题目来源codeforces|
 
 ## Some snapshot
-![](./snapshot/1.png)
-![](./snapshot/2.png)
-![](./snapshot/3.png)
-![](./snapshot/4.png)
+![](../snapshot/1.png)
+![](../snapshot/2.png)
+![](../snapshot/3.png)
+![](../snapshot/4.png)
 
 
 ## 基础使用
