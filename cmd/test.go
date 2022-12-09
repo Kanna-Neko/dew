@@ -118,6 +118,7 @@ func GetTestcases(problem string) testmanager.Testcases {
 		sp := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 		sp.Prefix = "geting TestCases "
 		sp.Start()
+		defer fmt.Println("problem " + problem + " fetch done")
 		defer sp.Stop()
 		input, output := link.GetSample(contest, index)
 		var res testmanager.Testcases
