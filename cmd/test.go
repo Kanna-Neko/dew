@@ -84,8 +84,10 @@ var testCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 			v.Input = strings.Trim(v.Input, " \n")
+			out = bytes.ReplaceAll(out, []byte("\r"), []byte(""))
 			out = bytes.Trim(out, " \n")
 			v.Output = strings.Trim(v.Output, " \n")
+			v.Output = strings.ReplaceAll(v.Output,"\r","")
 			if !bytes.Equal(out, []byte(v.Output)) {
 				sp.Stop()
 				fmt.Printf("oops! testcase %d wrong.\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s\n\n", index+1, v.Input, string(out), v.Output)
