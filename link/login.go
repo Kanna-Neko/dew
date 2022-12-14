@@ -117,6 +117,10 @@ func loginAgain() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	res, err = me.R().Get(codeforcesDomain)
+	if err != nil {
+		log.Fatal(err)
+	}
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(res.Body()))
 	if err != nil {
 		log.Fatal(err)
