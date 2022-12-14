@@ -96,42 +96,27 @@ func loginAgain() {
 			Value: rcpc,
 		})
 	}
-	res, err := me.R().SetFormData(map[string]string{
+	getCsrf(codeforcesDomain + "/enter")
+	_, err := me.R().SetFormData(map[string]string{
 		"action":        "enter",
 		"handleOrEmail": handle,
 		"password":      password,
 		"remember":      "on",
-	}).Post(codeforcesDomain + "/enter?back=%2F")
+		"csrf_token":    csrf,
+	}).Post(codeforcesDomain + "/enter?back")
 	if err != nil {
 		log.Fatal(err)
 	}
 	urL, _ := url.Parse(codeforcesDomain)
 	for _, val := range cookieJar.Cookies(urL) {
-		if val.Name == "39ce7" {
-			viper.Set("cookie.39ce7", val.Value)
-		} else if val.Name == "JSESSIONID" {
-			viper.Set("cookie.JSESSIONID", val.Value)
-		}
+		me.SetCookie(&http.Cookie{Name: val.Name, Value: val.Value})
+		viper.Set("cookie."+val.Name, val.Value)
 	}
 	viper.Set("cookie.expire", time.Now().AddDate(0, 0, 1).Unix())
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, err = me.R().Get(codeforcesDomain)
-	if err != nil {
-		log.Fatal(err)
-	}
-	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(res.Body()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	var exist bool
-	csrf, exist = doc.Find(".csrf-token").First().Attr("data-csrf")
-	if !exist {
-		log.Fatal("obtain csrf failed")
-		return
-	}
-	viper.Set("cookie.csrf", csrf)
+	getCsrf(codeforcesDomain)
 	err = viper.WriteConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -139,6 +124,13 @@ func loginAgain() {
 }
 
 func reloadCookie() {
+	cook := viper.GetStringMapString("cookie")
+	for k, v := range cook {
+		me.SetCookie(&http.Cookie{
+			Name:  k,
+			Value: v,
+		})
+	}
 	me.SetCookie(&http.Cookie{
 		Name:  "39ce7",
 		Value: viper.GetString("cookie.39ce7"),
@@ -165,7 +157,7 @@ func setProxy() {
 	}
 }
 func getRCPC() (string, bool) {
-	res, err := me.R().Get(codeforcesDomain)
+	res, err := me.R().Get(codeforcesDomain + "/enter")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -217,4 +209,22 @@ func decrypterRCPC(ocipher, okey, oiv string) string {
 	mode := cipher.NewCBCDecrypter(block, iv)
 	mode.CryptBlocks(ciphertext, ciphertext)
 	return fmt.Sprintf("%x", ciphertext)
+}
+
+func getCsrf(path string) {
+	res, err := me.R().Get(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(res.Body()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	var exist bool
+	csrf, exist = doc.Find(".csrf-token").First().Attr("data-csrf")
+	if !exist {
+		log.Fatal(string(res.Body()), "obtain csrf failed")
+		return
+	}
+	viper.Set("cookie.csrf", csrf)
 }
