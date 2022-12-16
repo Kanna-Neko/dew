@@ -173,10 +173,8 @@ dew random 1000 1200
 ```
 
 ## dew generate
-1. this command can generate a contest on mushups, I built three option in it for you, you can use `dew generate div1` `dew generate div2` `dew generate div3` to generate.
-这个命令将会生成一个比赛在mushups中，我内置了三个选项在这个命令中， 你可以使用`dew generate div1` `dew generate div2` `dew generate div3` 来生成比赛。
-2. If you hope custom difficult and filter some tag, you can use `dew generate custom` command, you can config it in "./codeforces/contestTemplate.json", dew will filter all problem satisfy thoes difficult, tag you choose in **good** field and without **bad** field
-如果你想自定义难度并且筛选一些标签，你可以使用`dew generate custom` 命令， 你可以配置一些选项在"./codeforces/contestTemplate.json",dew 将会筛选出你所选择的难度并且所有tag满足good中的标签，并且不包含bad中的标签。
+1. 命令将会生成一个比赛在mushups中，我内置了三个选项在这个命令中， 你可以使用`dew generate div1` `dew generate div2` `dew generate div3` 来生成比赛。
+2. 如果你想自定义难度并且筛选一些标签，你可以使用`dew generate custom` 命令， 你可以配置一些选项在"./codeforces/contestTemplate.json",dew 将会筛选出你所选择的难度并且所有tag满足good中的标签，并且不包含bad中的标签。
 ## 开发计划
 [link](https://miaonei.notion.site/45b6802260cb479896640a06d521c99e?v=83fa5f001404427fa645aa5009ada702)
 ## 代理设置
