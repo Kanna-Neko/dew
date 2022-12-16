@@ -11,6 +11,9 @@ I'm glad to introduce dew command application for you. dew is a assistant which 
 ## Install
 I introduce two solution for you
 
+### info
+Due to the change of security policy changes, please download the version greater 1.2.11.
+
 ### Download binary application and add into path
   1. open [releases](https://github.com/jaxleof/dew/releases)
   2. download zip
