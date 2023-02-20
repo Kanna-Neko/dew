@@ -49,7 +49,7 @@ func randomMinMax(min, max int) {
 	for i := min; i <= max; i += 100 {
 		pro = append(pro, strconv.Itoa(i))
 	}
-	var thisOne = PickOneProblem(ProblemCondition{Difficult: pro})
+	var thisOne = PickOneProblem(ProblemCondition{Difficult: pro}, nil)
 	viper.Set("problem", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
 	err := viper.WriteConfig()
 	if err != nil {

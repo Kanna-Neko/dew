@@ -23,7 +23,7 @@ import (
 )
 
 var div3Diffculty = []ProblemCondition{{Difficult: []string{"800"}}, {Difficult: []string{"800", "900"}}, {Difficult: []string{"900", "1000", "1100"}}, {Difficult: []string{"1100", "1200", "1300", "1400"}}, {Difficult: []string{"1400", "1500", "1600", "1700"}}, {Difficult: []string{"1700", "1800", "1900"}}, {Difficult: []string{"1900", "2000", "2100"}}}
-var div2Diffculty = []ProblemCondition{{Difficult: []string{"800", "900", "1000"},Bad: []string{"interactive"}}, {Difficult: []string{"1000", "1100", "1200"},Bad: []string{"interactive"}}, {Difficult: []string{"1200", "1300", "1400", "1500", "1600"}}, {Difficult: []string{"1600", "1700", "1800", "1900"}}, {Difficult: []string{"2000", "2100", "2200", "2300", "2400"}}, {Difficult: []string{"2500", "2600", "2700", "2800"}}}
+var div2Diffculty = []ProblemCondition{{Difficult: []string{"800", "900", "1000"}, Bad: []string{"interactive"}}, {Difficult: []string{"1000", "1100", "1200"}, Bad: []string{"interactive"}}, {Difficult: []string{"1200", "1300", "1400", "1500", "1600"}}, {Difficult: []string{"1600", "1700", "1800", "1900"}}, {Difficult: []string{"2000", "2100", "2200", "2300", "2400"}}, {Difficult: []string{"2500", "2600", "2700", "2800"}}}
 var div1Diffculty = []ProblemCondition{{Difficult: []string{"1500", "1600", "1700"}}, {Difficult: []string{"1800", "1900", "2000", "2100", "2200", "2300"}}, {Difficult: []string{"2400", "2500", "2600", "2700", "2800"}}, {Difficult: []string{"2900", "3000", "3100", "3200", "3300"}}, {Difficult: []string{"3400", "3500"}}}
 
 func init() {
@@ -55,6 +55,7 @@ var div3 = &cobra.Command{
 			Duration:          "120",
 			ContestTitle:      "miaonei",
 			ProblemConditions: div3Diffculty,
+			BanProblems:       nil,
 		})
 	},
 }
@@ -66,6 +67,7 @@ var div2 = &cobra.Command{
 			Duration:          "120",
 			ContestTitle:      "miaonei",
 			ProblemConditions: div2Diffculty,
+			BanProblems:       nil,
 		})
 	},
 }
@@ -77,6 +79,7 @@ var div1 = &cobra.Command{
 			Duration:          "120",
 			ContestTitle:      "miaonei",
 			ProblemConditions: div1Diffculty,
+			BanProblems:       nil,
 		})
 	},
 }
@@ -92,7 +95,7 @@ func newContest(contest ContestInfo) {
 		contest.ProblemConditions = div2Diffculty
 	}
 	link.Login()
-	pro := PickSomeProblem(contest.ProblemConditions)
+	pro := PickSomeProblem(contest.ProblemConditions, contest.BanProblems)
 	link.CreateContest(contest.ContestTitle, contest.Duration, pro)
 	OpenWebsite(codeforcesDomain + "/mashups")
 }
@@ -133,7 +136,7 @@ func Random() {
 	}
 	var thisOne = PickOneProblem(ProblemCondition{
 		Difficult: pro,
-	})
+	}, nil)
 	viper.Set("problem", strconv.Itoa(thisOne.ContestId)+thisOne.Index)
 	err := viper.WriteConfig()
 	if err != nil {
@@ -143,14 +146,14 @@ func Random() {
 	GetTestcases(strconv.Itoa(thisOne.ContestId) + thisOne.Index)
 }
 
-func PickSomeProblem(in []ProblemCondition) []string {
+func PickSomeProblem(in []ProblemCondition, banProblems []string) []string {
 	cj := uispinner.New()
 	cj.Start()
 	login := cj.AddSpinner(spinner.CharSets[34], 100*time.Millisecond).SetPrefix("picking problems").SetComplete("pick problem complete")
 	var pro []string
 	var mp map[string]bool = make(map[string]bool)
 	for i := 0; i < len(in); i++ {
-		var one = PickOneProblem(in[i])
+		var one = PickOneProblem(in[i], banProblems)
 		var goal = strconv.Itoa(one.ContestId) + one.Index
 		if mp[goal] {
 			i--
@@ -164,11 +167,14 @@ func PickSomeProblem(in []ProblemCondition) []string {
 	return pro
 }
 
-func PickOneProblem(r ProblemCondition) problemInfo {
+func PickOneProblem(r ProblemCondition, banProblems []string) problemInfo {
 	data := PickProblems(r.Difficult)
 	data = Deduplication(data, link.GetStatus())
 	data = filterGood(data, r.Good)
 	data = filterBad(data, r.Bad)
+	if banProblems != nil {
+		data = filterBanProblems(data, banProblems)
+	}
 	if len(data) == 0 {
 		log.Fatal("you are so good, you have solve all problems of the range", r)
 	}
@@ -238,7 +244,20 @@ func filterBad(data []problemInfo, bad []string) []problemInfo {
 		result = append(result, v)
 	}
 	return result
+}
 
+func filterBanProblems(data []problemInfo, banProblems []string) []problemInfo {
+	var mp = make(map[string]bool)
+	for _, v := range banProblems {
+		mp[v] = true
+	}
+	var result []problemInfo
+	for _, v := range data {
+		if !mp[strconv.Itoa(v.ContestId)+v.Index] {
+			result = append(result, v)
+		}
+	}
+	return result
 }
 
 var customCmd = &cobra.Command{
@@ -254,6 +273,7 @@ type ContestInfo struct {
 	ContestTitle      string             `json:"contestTitle"`
 	Name              string             `json:"name"`
 	ProblemConditions []ProblemCondition `json:"problemConditions"`
+	BanProblems       []string           `json:"banProblems"`
 }
 type ProblemCondition struct {
 	Difficult []string `json:"difficult"`
@@ -384,6 +404,7 @@ func custom() {
 		newContest(ContestInfo{
 			Duration:          m.choice.Duration,
 			ContestTitle:      m.choice.ContestTitle,
+			BanProblems:       m.choice.BanProblems,
 			ProblemConditions: m.choice.ProblemConditions,
 		})
 	}

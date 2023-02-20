@@ -167,6 +167,7 @@ func initContestTemplate() {
 			Duration:          "120",
 			ContestTitle:      "Do you like cat?",
 			ProblemConditions: div2Diffculty,
+			BanProblems:       []string{"1A", "12B"},
 		}},
 	}
 	data, err := json.MarshalIndent(template, "", "  ")
