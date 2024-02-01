@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/jaxleof/dew/lang"
+	"github.com/Kanna-Neko/dew/lang"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

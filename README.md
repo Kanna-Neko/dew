@@ -21,7 +21,7 @@ Due to the change of security policy changes, please download the version greate
 
 ### Or use go install command
   1. prerequisite: download golang(https://golang.google.cn/)
-  2. use command `go install github.com/jaxleof/dew@latest`
+  2. use command `go install github.com/Kanna-Neko/dew@latest`
 
 ## Feature
 |name|describe|

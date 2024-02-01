@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jaxleof/dew/link"
+	"github.com/Kanna-Neko/dew/link"
 	"github.com/spf13/cobra"
 )
 

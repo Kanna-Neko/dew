@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jaxleof/dew/link"
+	"github.com/Kanna-Neko/dew/link"
 
 	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/bubbles/list"

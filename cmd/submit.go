@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/jaxleof/dew/lang"
-	"github.com/jaxleof/dew/link"
+	"github.com/Kanna-Neko/dew/lang"
+	"github.com/Kanna-Neko/dew/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -62,7 +62,7 @@ var submitCommand = &cobra.Command{
 		link.SubmitCode(contest, index, code, lan.ProgramTypeId)
 		if isGym(contest) {
 			OpenWebsite(codeforcesDomain + "/gym/" + contest + "/my")
-		}else {
+		} else {
 			OpenWebsite(codeforcesDomain + "/contest/" + contest + "/my")
 		}
 	},

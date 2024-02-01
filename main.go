@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/jaxleof/dew/cmd"
+	"github.com/Kanna-Neko/dew/cmd"
 )
 
 func main() {

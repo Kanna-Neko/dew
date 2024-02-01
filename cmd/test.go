@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Kanna-Neko/dew/lang"
+	"github.com/Kanna-Neko/dew/link"
+	testmanager "github.com/Kanna-Neko/dew/testManager"
 	"github.com/briandowns/spinner"
-	"github.com/jaxleof/dew/lang"
-	"github.com/jaxleof/dew/link"
-	testmanager "github.com/jaxleof/dew/testManager"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -87,7 +87,7 @@ var testCmd = &cobra.Command{
 			out = bytes.ReplaceAll(out, []byte("\r"), []byte(""))
 			out = bytes.Trim(out, " \n")
 			v.Output = strings.Trim(v.Output, " \n")
-			v.Output = strings.ReplaceAll(v.Output,"\r","")
+			v.Output = strings.ReplaceAll(v.Output, "\r", "")
 			if !bytes.Equal(out, []byte(v.Output)) {
 				sp.Stop()
 				fmt.Printf("oops! testcase %d wrong.\n----------in-----------\n%s\n----------out----------\n%s\n---------answer--------\n%s\n\n", index+1, v.Input, string(out), v.Output)

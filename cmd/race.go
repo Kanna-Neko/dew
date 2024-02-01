@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Kanna-Neko/dew/link"
 	"github.com/briandowns/spinner"
-	"github.com/jaxleof/dew/link"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

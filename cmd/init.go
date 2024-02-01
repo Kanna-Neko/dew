@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Kanna-Neko/dew/lang"
 	"github.com/briandowns/spinner"
-	"github.com/jaxleof/dew/lang"
 	"github.com/jaxleof/uispinner"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

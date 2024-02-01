@@ -1,4 +1,4 @@
-module github.com/jaxleof/dew
+module github.com/Kanna-Neko/dew
 
 go 1.18
 
