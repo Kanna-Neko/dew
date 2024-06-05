@@ -135,7 +135,8 @@ func GetContestInfo(contestId string) ContestStandingResult {
 		path := "https://codeforces.com/api/" + fmt.Sprintf(url, apikey,contestId, tim) + "&apiSig=987654" + hex.EncodeToString(hash[:])
 		response, err = me.R().Get(path)
 	} else {
-		response, err = me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=jaxleof&showUnofficial=true")
+		handle := viper.GetString("handle")
+		response, err = me.R().Get("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&handles=" + handle + "&showUnofficial=true")
 	}
 	if err != nil {
 		log.Fatal(err)
